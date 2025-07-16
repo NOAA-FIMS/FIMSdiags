@@ -9,8 +9,14 @@ data("data1")
 data_4_model <- FIMSFrame(data1)
 
 # Define fleet specifications
-fleet1 <- list(selectivity = list(form = "LogisticSelectivity"),data_distribution = c(Landings = "DlnormDistribution", AgeComp = "DmultinomDistribution",LengthComp = "DmultinomDistribution"))
-survey1 <- list(selectivity = list(form = "LogisticSelectivity"),data_distribution = c(Index = "DlnormDistribution", AgeComp = "DmultinomDistribution",LengthComp = "DmultinomDistribution"))
+fleet1 <- list(selectivity = list(form = "LogisticSelectivity"),
+data_distribution = c(Landings = "DlnormDistribution", 
+AgeComp = "DmultinomDistribution",
+LengthComp = "DmultinomDistribution"))
+survey1 <- list(selectivity = list(form = "LogisticSelectivity"),
+data_distribution = c(Index = "DlnormDistribution", 
+AgeComp = "DmultinomDistribution",
+LengthComp = "DmultinomDistribution"))
 
 # Create parameters
 parameters <- data_4_model |>
