@@ -5,53 +5,39 @@ library(tidyr)
 # Load sample data
 data("data1")
 
-# Define fleet specifications
-fleet1 <- list(
-    selectivity = list(form = "LogisticSelectivity"),
-    data_distribution = c(
-        Landings = "DlnormDistribution",
-        AgeComp = "DmultinomDistribution",
-        LengthComp = "DmultinomDistribution"
-    )
-)
-survey1 <- list(
-    selectivity = list(form = "LogisticSelectivity"),
-    data_distribution = c(
-        Index = "DlnormDistribution",
-        AgeComp = "DmultinomDistribution",
-        LengthComp = "DmultinomDistribution"
-    )
-)
-
-# Create parameters
-parameters <- data1 |>
-    create_default_parameters(fleets = list(fleet1 = fleet1, survey1 = survey1))
-
 # Function to prepare data and run FIMS model for a given number of years to remove
-run_fims_model <- function(data, years_to_remove = 0) {
+#' @param data full dataset used in base model run
+#' @param years_to_remove vector of number of years to remove, 
+#' i.e. if you want to do 5 retrospective peels 0:5
+#' @param params input parameters used in base FIMS model 
+
+run_fims_retro <- function(data, years_to_remove = 0, params) {
     # Remove years from data1
     if (years_to_remove == 0) {
         data_retro <- data
     } else {
         data_retro <- data |>
             dplyr::filter(
+                !(type %in% c("index", "age", "length", "age-to-length-conversion")) |
                 dateend <= max(dateend) - lubridate::years(years_to_remove)
             )
     }
     data_model <- FIMSFrame(data_retro)
-    params <- data_model |>
-        create_default_parameters(
-            fleets = list(fleet1 = fleet1, survey1 = survey1)
-        )
+ 
+    #User supplies parameters from base model
     fit <- params |>
         initialize_fims(data = data_model) |>
         fit_fims(optimize = TRUE)
     return(fit)
 }
 
+# Example: remove one year at a time and run 
+fit0 <- run_fims_retro(data1, years_to_remove = 0, params = parameters)
+fit1 <- run_fims_retro(data1, years_to_remove = 1, params = parameters)
+
 # Example: run models removing 0, 1, and 2 years in parallel
 years_to_remove <- 0:2
-fits <- furrr::future_map(years_to_remove = 0:2, run_fims_model, data = data1)
+fits <- furrr::future_map(.x = years_to_remove, .f = run_fims_retro, data = data1)
 
 # get the @estimates slot from each model and rbind them, adding an additional column for the year removed
 estimates_list <- lapply(fits, function(fit) fit@estimates)
