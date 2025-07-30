@@ -12,7 +12,14 @@ data("data1")
 #' @param params input parameters used in base FIMS model 
 
 run_fims_retro <- function(data, years_to_remove = 0, params) {
-    # Remove years from data1
+    # check if the input is a FIMSframe object and if so, extract the data
+    # this is to avoid the warning:
+    #   no applicable method for 'filter' applied to an object of class "FIMSFrame"
+    if ("FIMSFrame" %in% is(tiny_data)) {
+        data <- data@data
+    }
+
+    # Remove years from data
     if (years_to_remove == 0) {
         data_retro <- data
     } else {
@@ -22,6 +29,7 @@ run_fims_retro <- function(data, years_to_remove = 0, params) {
                 dateend <= max(dateend) - lubridate::years(years_to_remove)
             )
     }
+    # convert to FIMSFrame format
     data_model <- FIMSFrame(data_retro)
  
     #User supplies parameters from base model
