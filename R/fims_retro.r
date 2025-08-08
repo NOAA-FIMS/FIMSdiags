@@ -15,7 +15,7 @@ run_fims_retro <- function(data, years_to_remove = 0, params) {
     # check if the input is a FIMSframe object and if so, extract the data
     # this is to avoid the warning:
     #   no applicable method for 'filter' applied to an object of class "FIMSFrame"
-    if ("FIMSFrame" %in% is(tiny_data)) {
+    if ("FIMSFrame" %in% is(data)) { 
         data <- data@data
     }
 
@@ -44,6 +44,7 @@ fit0 <- run_fims_retro(data1, years_to_remove = 0, params = parameters)
 fit1 <- run_fims_retro(data1, years_to_remove = 1, params = parameters)
 
 # Example: run models removing 0, 1, and 2 years in parallel
+# TODO: add this inside the retro function
 years_to_remove <- 0:2
 fits <- furrr::future_map(
     .x = years_to_remove, 
@@ -53,6 +54,7 @@ fits <- furrr::future_map(
     )
 
 # get the @estimates slot from each model and rbind them, adding an additional column for the year removed
+#TODO: add this inside the function and return estimates_df
 estimates_list <- lapply(fits, function(fit) fit@estimates)
 for (i in seq_along(estimates_list)) {
     estimates_list[[i]]$retro_year <- years_to_remove[i]
