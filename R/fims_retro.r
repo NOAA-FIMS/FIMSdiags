@@ -7,12 +7,19 @@ data("data1")
 
 # Function to prepare data and run FIMS model for a given number of years to remove
 #' @param data full dataset used in base model run
-#' @param years_to_remove vector of number of years to remove, 
+#' @param years_to_remove vector of number of years to remove,
 #' i.e. if you want to do 5 retrospective peels 0:5
-#' @param params input parameters used in base FIMS model 
+#' @param params input parameters used in base FIMS model
 
 run_fims_retro <- function(data, years_to_remove = 0, params) {
-    # Remove years from data1
+    # check if the input is a FIMSframe object and if so, extract the data
+    # this is to avoid the warning:
+    #   no applicable method for 'filter' applied to an object of class "FIMSFrame"
+    if ("FIMSFrame" %in% is(tiny_data)) {
+        data <- data@data
+    }
+
+    # Remove years from data
     if (years_to_remove == 0) {
         data_retro <- data
     } else {
@@ -22,8 +29,9 @@ run_fims_retro <- function(data, years_to_remove = 0, params) {
                 dateend <= max(dateend) - lubridate::years(years_to_remove)
             )
     }
+    # convert to FIMSFrame format
     data_model <- FIMSFrame(data_retro)
- 
+
     #User supplies parameters from base model
     fit <- params |>
         initialize_fims(data = data_model) |>
@@ -31,13 +39,18 @@ run_fims_retro <- function(data, years_to_remove = 0, params) {
     return(fit)
 }
 
-# Example: remove one year at a time and run 
+# Example: remove one year at a time and run
 fit0 <- run_fims_retro(data1, years_to_remove = 0, params = parameters)
 fit1 <- run_fims_retro(data1, years_to_remove = 1, params = parameters)
 
 # Example: run models removing 0, 1, and 2 years in parallel
 years_to_remove <- 0:2
-fits <- furrr::future_map(.x = years_to_remove, .f = run_fims_retro, data = data1, params = parameters)
+fits <- furrr::future_map(
+    .x = years_to_remove, 
+    .f = run_fims_retro, 
+    data = data1, 
+    params = parameters
+    )
 
 # get the @estimates slot from each model and rbind them, adding an additional column for the year removed
 estimates_list <- lapply(fits, function(fit) fit@estimates)
@@ -52,9 +65,11 @@ estimates_df <- do.call(rbind, estimates_list)
 library(ggplot2)
 ggplot(estimates_df, aes(x = year, y = estimate, color = retro_year)) +
     geom_line() +
-    labs(title = "SSB Time Series by Year Removed",
-         x = "Year",
-         y = "SSB Estimate") +
+    labs(
+        title = "SSB Time Series by Year Removed",
+        x = "Year",
+        y = "SSB Estimate"
+    ) +
     theme_minimal()
 
 
@@ -63,13 +78,16 @@ ggplot(estimates_df, aes(x = year, y = estimate, color = retro_year)) +
 SSBtable <- cbind(
     fits[[1]]@estimates |>
         dplyr::filter(label == "SSB") |>
-        dplyr::pull(estimate) |> head(10),
+        dplyr::pull(estimate) |>
+        head(10),
     fits[[2]]@estimates |>
         dplyr::filter(label == "SSB") |>
-        dplyr::pull(estimate) |> head(10),
+        dplyr::pull(estimate) |>
+        head(10),
     fits[[3]]@estimates |>
         dplyr::filter(label == "SSB") |>
-        dplyr::pull(estimate) |> head(10)
+        dplyr::pull(estimate) |>
+        head(10)
 )
 
 # proof that values are different among models

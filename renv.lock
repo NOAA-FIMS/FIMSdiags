@@ -74,7 +74,7 @@
       "Maintainer": "Kelli F. Johnson <kelli.johnson@noaa.gov>",
       "RemoteType": "github",
       "RemoteHost": "api.github.com",
-      "RemoteUsername": "NOAA-FIMS",
+      "RemoteUsername": "noaa-fims",
       "RemoteRepo": "FIMS",
       "RemoteRef": "dev-debug-model-nans",
       "RemoteSha": "1669424129d1a774bf444ee4a8818dee354c3e51"
