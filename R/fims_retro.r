@@ -18,7 +18,7 @@ run_fims_retro <- function(data, years_to_remove = 0, params) {
     } else {
         data_retro <- data |>
             dplyr::filter(
-                !(type %in% c("index", "age", "length", "age-to-length-conversion")) |
+                !(type %in% c("index", "age", "length")) | #TODO: maybe reverse filter
                 dateend <= max(dateend) - lubridate::years(years_to_remove)
             )
     }
@@ -37,7 +37,7 @@ fit1 <- run_fims_retro(data1, years_to_remove = 1, params = parameters)
 
 # Example: run models removing 0, 1, and 2 years in parallel
 years_to_remove <- 0:2
-fits <- furrr::future_map(.x = years_to_remove, .f = run_fims_retro, data = data1)
+fits <- furrr::future_map(.x = years_to_remove, .f = run_fims_retro, data = data1, params = parameters)
 
 # get the @estimates slot from each model and rbind them, adding an additional column for the year removed
 estimates_list <- lapply(fits, function(fit) fit@estimates)

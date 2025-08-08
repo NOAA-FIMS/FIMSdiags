@@ -47,5 +47,5 @@ data2 <- data1 |>
             )
 
 # Check that run_fims_model() can use same parameters as base model and produce the same output
-fit0 <- run_fims_retro(data1, years_to_remove = 0, params = parameters)
+fit0 <- run_fims_retro(data1, years_to_remove = 1, params = parameters)
 
