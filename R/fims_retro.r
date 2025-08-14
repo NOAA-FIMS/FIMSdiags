@@ -39,6 +39,8 @@ run_fims_retro <- function(data, years_to_remove = 0, params) {
     return(fit)
 }
 
+# allow devtools::load_all() without running commands below
+if (FALSE) {
 # Example: remove one year at a time and run
 fit0 <- run_fims_retro(data1, years_to_remove = 0, params = parameters)
 fit1 <- run_fims_retro(data1, years_to_remove = 1, params = parameters)
@@ -105,3 +107,5 @@ SSBtable
 # SSB 5568.276 5556.572 5554.346
 # SSB 4569.733 4557.078 4556.954
 # SSB 4711.758 4698.478 4701.322
+
+}

@@ -24,47 +24,35 @@ run_fims_likelihood <- function(
 ) {
   # calculate vector
   values = seq(min, max, length = length)
-  init <- parameters$parameters$recruitment[[parameter_label]]
+  init <- parameters$parameters$recruitment[[parameter_label]] #TODO: replace with parameter value from fit model
   vec <- values + init
   # report the values
   cli::cli_alert_info(
     "parameter values being profiles over: {paste(vec, collapse = ', ')}"
   )
-  run_modified_fims <- function(new_value, parameters, data) {
-    parameters_mod <- parameters |>
-      update_parameters(
-        modified_parameters = list(
-          # TODO: figure out how to specify a generic parameter
-          recruitment = list(
-            BevertonHoltRecruitment.log_rzero.value = new_value,
-            BevertonHoltRecruitment.log_rzero.estimation_type = "constant"
-          )
-        )
-      )
-    data_model <- FIMSFrame(data)
-
-    #TODO: replace parameters input with fitted FIMS model and use code below
-    # to get final values of all parameters as a starting point
-    #like_fit$fits[[1]]@obj$env$last.par.best
-    #how to get parameter values with names: FIMS:::get_parameter_names(like_fit$fits[[1]]@obj$env$last.par.best)
-    #data object will be avaialble later
-    #like_fit$fits[[1]]@obj$env$data or #like_fit$fits[[1]]@obj$data
-
-    new_fit <- parameters_mod |>
-      initialize_fims(data = data_model) |>
-      fit_fims(optimize = TRUE)
-    return(new_fit)
-  }
-
+  
+  # run FIMS in parallel for each of the likelihood profile values
   fits <- furrr::future_map(
     .x = vec,
     .f = run_modified_fims,
     data = data,
     parameters = parameters
   )
-  return(list("vec" = vec, "fits" = fits))
+
+# pull the fits tibble out of each of the FIMSFit S4 objects into a list
+fits_list <- lapply(fits, function(fit) fit@fits)
+
+# adding the fixed parameter value to the fits tibble for each of the models
+for (i in seq_along(fits_list)) {
+  fits_list[[i]]$profile_parameter_value <- vec[i]
+}
+# combine the separate tibbles in the list into one longer tibble
+fits_df <- do.call(rbind, fits_list)
+
+  return(list("vec" = vec, "fits" = fits_df))
 }
 
+if (FALSE) {
 # call the function above
 like_fit <- run_fims_likelihood(
   parameters = parameters,
@@ -74,16 +62,11 @@ like_fit <- run_fims_likelihood(
   length = 3
 )
 
-# like_fit[[1]]@fits
-#TODO: add this inside the function and have it return fits_df
-fits_list <- lapply(like_fit$fits, function(fit) fit@fits)
-for (i in seq_along(fits_list)) {
-  fits_list[[i]]$profile_parameter_value <- like_fit$vec[i]
-}
-fits_df <- do.call(rbind, fits_list)
-head(fits_df)
-table(fits_df$profile_parameter_value)
-
-fits_df |>
+# summing total likelihood by parameter value, use later for plotting
+ like_fit$fits |>
   dplyr::group_by(profile_parameter_value) |>
-  dplyr::summarise(total_like = sum(log_like))
+  dplyr::summarise(total_like = sum(log_like)) |> 
+  dplyr::mutate(total_like_change = total_like - min(total_like))
+  
+
+}

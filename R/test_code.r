@@ -1,4 +1,5 @@
-library(FIMS)
+if (FALSE) { #preventing code from running when calling devtools::load_all()
+  library(FIMS)
 
 # clear memory
 clear()
@@ -49,3 +50,4 @@ data2 <- data1 |>
 # Check that run_fims_model() can use same parameters as base model and produce the same output
 fit0 <- run_fims_retro(data1, years_to_remove = 1, params = parameters)
 
+}
