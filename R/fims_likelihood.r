@@ -4,6 +4,7 @@ library(FIMS)
 #'
 #' This function runs a likelihood profile for a FIMS model by fixing a specified parameter at a range of values spanning the initial value.
 #'
+#' @param model Output from [fit_fims()], currently only used to get the estimated value for log_rzero.
 #' @param parameters A FIMS parameters object containing the model parameters.
 #' @param data A dataframe or tibble containing the model data, or a FIMSFrame object.
 #' @param parameter_label NOT YET FUNCTIONAL. A string specifying the parameter to profile over, e.g., "BevertonHoltRecruitment.log_rzero.value".
@@ -14,6 +15,7 @@ library(FIMS)
 #' @export
 
 run_fims_likelihood <- function(
+  model,
   parameters,
   data,
   parameter_label = "BevertonHoltRecruitment.log_rzero.value",
@@ -24,7 +26,10 @@ run_fims_likelihood <- function(
 ) {
   # calculate vector
   values = seq(min, max, length = length)
-  init <- parameters$parameters$recruitment[[parameter_label]] #TODO: replace with parameter value from fit model
+  # init <- parameters$parameters$recruitment[[parameter_label]] #TODO: replace with parameter value from fit model
+  parameter_names <- names(FIMS:::get_parameter_names(model@obj$env$last.par.best))
+  parameter_name <- parameter_names[grepl("log_rzero", parameter_names)]
+  init <- FIMS:::get_parameter_names(model@obj$env$last.par.best)[[parameter_name]] 
   vec <- values + init
   # report the values
   cli::cli_alert_info(
@@ -50,23 +55,4 @@ for (i in seq_along(fits_list)) {
 fits_df <- do.call(rbind, fits_list)
 
   return(list("vec" = vec, "fits" = fits_df))
-}
-
-if (FALSE) {
-# call the function above
-like_fit <- run_fims_likelihood(
-  parameters = parameters,
-  data = data1,
-  min = -1,
-  max = 1,
-  length = 3
-)
-
-# summing total likelihood by parameter value, use later for plotting
- like_fit$fits |>
-  dplyr::group_by(profile_parameter_value) |>
-  dplyr::summarise(total_like = sum(log_like)) |> 
-  dplyr::mutate(total_like_change = total_like - min(total_like))
-  
-
 }

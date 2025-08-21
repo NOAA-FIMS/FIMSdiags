@@ -36,6 +36,24 @@ base_model <- parameters |>
   initialize_fims(data = data_4_model) |>
   fit_fims(optimize = TRUE)
 
+# get parameters (revisit this after changes that Bai is making to how parameters are specified)
+FIMS:::get_parameter_names(base_model@obj$env$last.par.best)
+base_model@obj$par
+
+
+# call the likelihood profile function defined in R/fims_likelihood.r
+devtools::load_all()
+like_fit <- run_fims_likelihood(
+  model = base_model,
+  parameters = parameters,
+  data = data1,
+  min = -1,
+  max = 1,
+  length = 3
+)
+
+plot_likelihood(like_fit)
+
 # Clear memory post-run
 clear()
 

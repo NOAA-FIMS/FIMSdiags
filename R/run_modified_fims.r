@@ -21,5 +21,7 @@ run_modified_fims <- function(new_value, parameters, data) { #TODO: Move this ou
     new_fit <- parameters_mod |>
       initialize_fims(data = data_model) |>
       fit_fims(optimize = TRUE)
+
+    clear()
     return(new_fit)
   }
