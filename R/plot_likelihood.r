@@ -9,10 +9,10 @@ plot_likelihood <- function(like_fit, type = NULL, fleet = NULL) {
   # summing total likelihood by parameter value, use later for plotting
   by_type <- like_fit$fits |>
     dplyr::group_by(profile_parameter_value, label) |>
-    dplyr::summarise(total_like = sum(log_like))
+    dplyr::summarise(total_like = -sum(log_like)) # negative to make negative log likelihood
   total <- like_fit$fits |>   
     dplyr::group_by(profile_parameter_value) |> 
-    dplyr::summarise(total_like = sum(log_like)) |>
+    dplyr::summarise(total_like = -sum(log_like)) |> # negative to make negative log likelihood
     dplyr::mutate(label = "Total") |> 
     dplyr::select(profile_parameter_value, label, total_like)
   # group the data type totals and the overall total and then 
@@ -23,8 +23,10 @@ plot_likelihood <- function(like_fit, type = NULL, fleet = NULL) {
     dplyr::mutate(total_like_change = total_like - min(total_like))
   
   # plot all the lines 
-  grouped_like |>
+  p1 <- grouped_like |>
     ggplot2::ggplot() +
     ggplot2::geom_line(ggplot2::aes(x = profile_parameter_value, y = total_like_change, color = label)) 
-    ggplot2::ggsave("likelihood.png")
+ #   ggplot2::ggsave("likelihood.png")
+
+  return(p1)
 }
