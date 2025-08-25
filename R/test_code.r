@@ -42,7 +42,7 @@ base_model@obj$par
 
 
 # call the likelihood profile function defined in R/fims_likelihood.r
-devtools::load_all()
+# devtools::load_all()
 like_fit <- run_fims_likelihood(
   model = base_model,
   parameters = parameters,

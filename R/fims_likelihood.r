@@ -49,7 +49,10 @@ fits_list <- lapply(fits, function(fit) fit@fits)
 
 # adding the fixed parameter value to the fits tibble for each of the models
 for (i in seq_along(fits_list)) {
-  fits_list[[i]]$profile_parameter_value <- vec[i]
+  # create a new column name based on the profile parameter
+  # this could be extended to profile over multiple dimensions parameters
+  colname <- paste0("value_", parameter_label)
+  fits_list[[i]][[colname]] <- vec[i]
 }
 # combine the separate tibbles in the list into one longer tibble
 fits_df <- do.call(rbind, fits_list)
