@@ -18,7 +18,8 @@ run_fims_likelihood <- function(
   model,
   parameters,
   data,
-  parameter_label = "BevertonHoltRecruitment.log_rzero.value",
+  module_name = NULL,
+  parameter_label = "log_rzero",
   min = -2,
   max = 2,
   length = 5
@@ -27,15 +28,49 @@ run_fims_likelihood <- function(
   # calculate vector
   values = seq(min, max, length = length)
   # init <- parameters$parameters$recruitment[[parameter_label]] #TODO: replace with parameter value from fit model
-  parameter_names <- names(FIMS:::get_parameter_names(model@obj$env$last.par.best))
-  parameter_name <- parameter_names[grepl("log_rzero", parameter_names)]
-  init <- FIMS:::get_parameter_names(model@obj$env$last.par.best)[[parameter_name]] 
+  #parameter_names <- names(FIMS:::get_parameter_names(model@obj$env$last.par.best))
+  #parameter_name <- parameter_names[grepl("log_rzero", parameter_names)]
+  #init <- FIMS:::get_parameter_names(model@obj$env$last.par.best)[[parameter_name]] 
+  init = 13.8 # temporary hardcoding of initial value for log_rzero
   vec <- values + init
   # report the values
   cli::cli_alert_info(
     "parameter values being profiles over: {paste(vec, collapse = ', ')}"
   )
-  
+
+  # if parameters is nested, then unnest
+  if ("data" %in% names(parameters)) {
+    parameters <- parameters |> tidyr::unnest(cols = data)
+  }
+
+  # find the parameter
+  if (!is.null(module_name)) {
+    parameter_row <- parameters |> 
+      dplyr::filter(.data$module_name == module_name & label == parameter_label)
+    if (nrow(parameter_row) == 0) {
+      cli::cli_abort("Parameter with module name {module_name} and label {label} not found in parameters object")
+    }
+  } else {
+    parameter_row <- parameters |> 
+      dplyr::filter(label == parameter_label)
+    if (nrow(parameter_row) == 0) {
+      cli::cli_abort("Parameter with label {label} not found in parameters object")
+    }
+    if (nrow(parameter_row) > 1) {
+      cli::cli_abort("Multiple parameters with label {label} found in parameters object, please specify module_name")
+    }
+  }
+
+  # Update value
+  parameter_row$value <- vec[1] # TODO: hardwire for now
+  parameters <- parameters |> 
+    dplyr::rows_update(
+      parameter_row,
+      by = c("module_name", "label")
+    )
+
+  # TODO: make this work for the full vector, not just the first value
+
   # run FIMS in parallel for each of the likelihood profile values
   fits <- furrr::future_map(
     .x = vec,

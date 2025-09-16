@@ -68,4 +68,16 @@ data2 <- data1 |>
 # Check that run_fims_model() can use same parameters as base model and produce the same output
 fit0 <- run_fims_retro(data1, years_to_remove = 1, params = parameters)
 
+
+# new code on dev branch 2025-09-16
+# depends on running the vignette first to get length_only_fit
+run_fims_likelihood(
+  model = length_only_fit,
+  parameters = parameters_4_model,
+  data = data_4_model
+  )
+
+
+
+
 }
