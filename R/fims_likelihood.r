@@ -52,9 +52,9 @@ run_fims_likelihood <- function(
 
   # Set number of cores to use 
   n_cores <- parallel::detectCores() - 1
-  plan(multisession, workers = n_cores)
+  future::plan(future::multisession, workers = n_cores)
   # Ensure cleanup happens 
-  on.exit(plan(sequential), add = TRUE)
+  on.exit(future::plan(future::sequential), add = TRUE)
 
   # run FIMS in parallel for each of the likelihood profile values
   fits <- furrr::future_map(

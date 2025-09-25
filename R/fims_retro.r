@@ -60,8 +60,8 @@ run_modified_data_fims <- function(years_to_remove = 0, data, parameters) {
 run_fims_retrospective <- function(years_to_remove, data, parameters) {
     # Set up parallel processing
     n_cores <- parallel::detectCores() - 1
-    plan(multisession, workers = n_cores)
-    on.exit(plan(sequential), add = TRUE)
+    future::plan(future::multisession, workers = n_cores)
+    on.exit(future::plan(future::sequential), add = TRUE)
 
     # Run retro analyses in parallel
     retro_fits <- furrr::future_map(
