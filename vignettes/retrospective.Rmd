@@ -2,7 +2,7 @@
 title: "Running a retrospective analysis on a FIMS model"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{retrospective}
+  %\VignetteIndexEntry{Running a retrospective analysis on a FIMS model}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
@@ -12,6 +12,7 @@ knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>"
 )
+
 ```
 
 ```{r setup}
@@ -45,7 +46,7 @@ base_model <- parameters |>
 clear()
 ```
 
-```{r retro}
+```{r, retro, eval = FALSE}
 retro_fit <- run_fims_likelihood(years_to_remove = 0:2, data_4_model, parameters)
 
 # plot the SSB time series from each model

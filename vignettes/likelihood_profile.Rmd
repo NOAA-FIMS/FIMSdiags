@@ -2,7 +2,7 @@
 title: "Running a likelihood profile on a FIMS model"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{likelihood_profile}
+  %\VignetteIndexEntry{Running a likelihood profile on a FIMS model}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
@@ -12,6 +12,7 @@ knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>"
 )
+
 ```
 
 ```{r setup}
