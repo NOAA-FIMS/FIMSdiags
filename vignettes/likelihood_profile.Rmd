@@ -1,0 +1,60 @@
+---
+title: "Running a Likelihood Profile on a FIMS model"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{likelihood_profile}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r setup}
+library(FIMSdiags)
+library(FIMS)
+clear()
+```
+
+## Set up FIMS model  
+Following the minimal demo vignette, we will set up a FIMS model and run it.  
+
+```{r run_fims_model}
+# Load sample data
+data("data1")
+# Prepare data for FIMS model
+data_4_model <- FIMSFrame(data1)
+
+# Create parameters
+parameters <- data_4_model |>
+  create_default_configurations() |>
+  create_default_parameters(data = data_4_model)
+
+# Run the  model with optimization
+base_model <- parameters |>
+  initialize_fims(data = data_4_model) |>
+  fit_fims(optimize = TRUE)
+
+# Clear memory post-run
+clear()
+```
+
+## Run likelihood profile  
+
+```{r like_profile}
+
+like_fit <- run_fims_likelihood(
+  model = base_model,
+  parameters = parameters,
+  data = data1,
+  min = -1,
+  max = 1,
+  length = 3
+)
+
+plot_likelihood(like_fit)
+```
