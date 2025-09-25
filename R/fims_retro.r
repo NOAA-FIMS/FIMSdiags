@@ -1,111 +1,82 @@
-library(FIMS)
-library(tidyr)
 
-## Testing how to remove one year of data and run multiple FIMS models
-# Load sample data
-data("data1")
-
-# Function to prepare data and run FIMS model for a given number of years to remove
+#' Function to remove a given number of years of data and run FIMS model
+#' This function is called by run_fims_retrospective()
+#'
+#' @param years_to_remove number of years to remove
 #' @param data full dataset used in base model run
-#' @param years_to_remove vector of number of years to remove,
-#' i.e. if you want to do 5 retrospective peels 0:5
-#' @param params input parameters used in base FIMS model
+#' @param parameters input parameters used in base FIMS model
+#' @return FIMS model fitted with years of data removed
+#' @export
 
-run_fims_retro <- function(data, years_to_remove = 0, params) {
+run_modified_data_fims <- function(years_to_remove = 0, data, parameters) {
+    # Need to load packages for each worker for furrr functions
+    require(FIMS, quietly = TRUE)
+    require(dplyr, quietly = TRUE)
+    require(lubridate, quietly = TRUE)
+    require(cli, quietly = TRUE)
+
     # check if the input is a FIMSframe object and if so, extract the data
     # this is to avoid the warning:
     #   no applicable method for 'filter' applied to an object of class "FIMSFrame"
-    if ("FIMSFrame" %in% is(data)) { 
+    if ("FIMSFrame" %in% is(data)) {
         data <- data@data
     }
 
     # Remove years from data
     if (years_to_remove == 0) {
-        data_retro <- data
+        data_mod <- data
     } else {
-        data_retro <- data |>
+        data_mod <- data |>
             dplyr::filter(
-                !(type %in% c("index", "age", "length")) | #TODO: maybe reverse filter
-                dateend <= max(dateend) - lubridate::years(years_to_remove)
+                (type %in% c("age-to-length-conversion", "weight-at-age")) |
+                    dateend <= max(dateend) - lubridate::years(years_to_remove)
             )
     }
     # convert to FIMSFrame format
-    data_model <- FIMSFrame(data_retro)
+    data_model <- FIMSFrame(data_mod)
+
+    # report the year removed being run
+    cli::cli_alert_info(
+        "running model with {paste(years_to_remove, collapse = ', ')} years of data removed"
+    )
 
     #User supplies parameters from base model
-    fit <- params |>
+    fit <- parameters |>
         initialize_fims(data = data_model) |>
-        fit_fims(optimize = TRUE)
+        fit_fims(optimize = TRUE) #TODO: getting error when removing years of data from json (maybe would be fixed if using the dev-json-caa branch? right now on dev branch)
     return(fit)
 }
 
-# allow devtools::load_all() without running commands below
-if (FALSE) {
-# Example: remove one year at a time and run
-fit0 <- run_fims_retro(data1, years_to_remove = 0, params = parameters)
-fit1 <- run_fims_retro(data1, years_to_remove = 1, params = parameters)
+#' Function runs a retrospective analysis for a FIMS model based on a vector of 
+#' years to be removed from the data
+#'
+#' @param years_to_remove vector of number of years to remove (e.g. if you want to 
+#' do 5 peels, years_to_remove = 0:5)
+#' @param data full dataset used in base model run
+#' @param parameters input parameters used in base FIMS model
+#' @return A list containing the vector of parameter values and a dataframe of estimates from each retrospective peel
+#' @export
 
-# Example: run models removing 0, 1, and 2 years in parallel
-# TODO: add this inside the retro function
-years_to_remove <- 0:2
-fits <- furrr::future_map(
-    .x = years_to_remove, 
-    .f = run_fims_retro, 
-    data = data1, 
-    params = parameters
+run_fims_retrospective <- function(years_to_remove, data, parameters) {
+    # Set up parallel processing
+    n_cores <- parallel::detectCores() - 1
+    plan(multisession, workers = n_cores)
+    on.exit(plan(sequential), add = TRUE)
+
+    # Run retro analyses in parallel
+    retro_fits <- furrr::future_map(
+        .x = years_to_remove,
+        .f = run_modified_data_fims,
+        data = data,
+        parameters = parameters
     )
 
-# get the @estimates slot from each model and rbind them, adding an additional column for the year removed
-#TODO: add this inside the function and return estimates_df
-estimates_list <- lapply(fits, function(fit) fit@estimates)
-for (i in seq_along(estimates_list)) {
-    estimates_list[[i]]$retro_year <- years_to_remove[i]
-}
-estimates_df <- do.call(rbind, estimates_list)
+    estimates_list <- lapply(retro_fits, function(fit) fit@estimates)
 
-# plot the SSB time series from each model
-# NOTE: this doesn't work because we don't have a year value.
-#       there's a time column but it's empty
-library(ggplot2)
-ggplot(estimates_df, aes(x = year, y = estimate, color = retro_year)) +
-    geom_line() +
-    labs(
-        title = "SSB Time Series by Year Removed",
-        x = "Year",
-        y = "SSB Estimate"
-    ) +
-    theme_minimal()
+    for (i in seq_along(estimates_list)) {
+        estimates_list[[i]]$retro_year <- years_to_remove[i]
+    }
+    estimates_df <- do.call(rbind, estimates_list)
 
-
-# get SSB time series from each model
-# using head(10) because the range of years is different among models
-SSBtable <- cbind(
-    fits[[1]]@estimates |>
-        dplyr::filter(label == "SSB") |>
-        dplyr::pull(estimate) |>
-        head(10),
-    fits[[2]]@estimates |>
-        dplyr::filter(label == "SSB") |>
-        dplyr::pull(estimate) |>
-        head(10),
-    fits[[3]]@estimates |>
-        dplyr::filter(label == "SSB") |>
-        dplyr::pull(estimate) |>
-        head(10)
-)
-
-# proof that values are different among models
-SSBtable
-#         [,1]     [,2]     [,3]
-# SSB 6838.698 6825.748 6818.862
-# SSB 6839.828 6827.363 6819.676
-# SSB 6790.398 6778.632 6769.959
-# SSB 6590.985 6580.053 6570.594
-# SSB 6334.694 6324.161 6314.831
-# SSB 6120.571 6110.624 6103.179
-# SSB 6058.196 6047.160 6042.686
-# SSB 5568.276 5556.572 5554.346
-# SSB 4569.733 4557.078 4556.954
-# SSB 4711.758 4698.478 4701.322
-
+    return(list("years_to_remove" = years_to_remove, "estimates" = estimates_df))
 }
