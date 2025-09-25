@@ -5,6 +5,9 @@
 #' @param group Character string or vector of strings with columns to group by, 
 #' e.g., "label" to group by data type, c("label", "fleet_name") to group by data 
 #' type and fleet (although fleet_name is not currently in FIMS output).
+#' 
+#' @return ggplot of likelihood profile
+#' @export 
 plot_likelihood <- function(like_fit, group = "label") {
 
  # get column name for parameter being profiled

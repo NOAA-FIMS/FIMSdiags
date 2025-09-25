@@ -14,6 +14,9 @@ model fits for each step in a likelihood profile}
 e.g., "label" to group by data type, c("label", "fleet_name") to group by data
 type and fleet (although fleet_name is not currently in FIMS output).}
 }
+\value{
+ggplot of likelihood profile
+}
 \description{
 Plot likelihood profile
 }
