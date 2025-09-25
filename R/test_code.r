@@ -1,6 +1,14 @@
 if (FALSE) { #preventing code from running when calling devtools::load_all()
   library(FIMS)
 
+## Code to force usethis to recognize dir as a package 
+## for `usethis::use_vignette()`
+# Clear any cached project info
+options(usethis.quiet = FALSE)
+
+# Try setting the project again with more verbose output
+usethis::proj_set(".", force = TRUE)
+
 # clear memory
 clear()
 ## Testing how to remove one year of data and run multiple FIMS models
@@ -29,7 +37,8 @@ survey1 <- list(
 
 # Create parameters
 parameters <- data_4_model |>
-  create_default_parameters(fleets = list(fleet1 = fleet1, survey1 = survey1))
+  create_default_configurations() |>
+  create_default_parameters(data = data_4_model)
 
 # Run the  model with optimization
 base_model <- parameters |>
