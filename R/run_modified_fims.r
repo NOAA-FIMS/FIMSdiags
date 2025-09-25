@@ -1,4 +1,5 @@
 #' Modify a parameter input and run a FIMS model
+#' This function is called by run_fims_likelihood()
 #'
 #' @param new_value The new value to be changed in the FIMS model.
 #' @param parameter_name The name of the parameter value (as listed in parameters$label) to be modified
@@ -9,7 +10,7 @@
 #' @return FIMS model fitted to the new parameter input value
 #' @export
 
-run_modified_fims <- function(
+run_modified_pars_fims <- function(
   new_value, 
   parameter_name,
   module_name = NULL,

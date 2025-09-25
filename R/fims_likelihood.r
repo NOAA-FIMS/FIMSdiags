@@ -7,11 +7,11 @@ library(FIMS)
 #' @param model Output from [fit_fims()], currently only used to get the estimated value for log_rzero.
 #' @param parameters A FIMS parameters object containing the model parameters.
 #' @param data A dataframe or tibble containing the model data, or a FIMSFrame object.
-#' @param parameter_label NOT YET FUNCTIONAL. A string specifying the parameter to profile over, e.g., "BevertonHoltRecruitment.log_rzero.value".
+#' @param parameter_label A string specifying the parameter to profile over, e.g., "log_rzero".
 #' @param min The minimum value for the parameter profile relative to the initial value.
 #' @param max The maximum value for the parameter profile relative to the initial value.
 #' @param length The number of values to generate between `min` and `max`. An odd number is recommended to include the initial value.
-#' @return A list containing the vector of parameter values and the fitted models for each value. TODO: return a dataframe with the fits for each model.
+#' @return A list containing the vector of parameter values and a dataframe with the fits for each model.
 #' @export
 
 run_fims_likelihood <- function(
@@ -59,7 +59,7 @@ run_fims_likelihood <- function(
   # run FIMS in parallel for each of the likelihood profile values
   fits <- furrr::future_map(
     .x = vec,
-    .f = run_modified_fims,
+    .f = run_modified_pars_fims,
     parameter_name = parameter_label, 
     module_name = module_name,
     parameters = parameters,

@@ -1,5 +1,5 @@
 ---
-title: "Running a Likelihood Profile on a FIMS model"
+title: "Running a likelihood profile on a FIMS model"
 output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{likelihood_profile}
@@ -17,6 +17,7 @@ knitr::opts_chunk$set(
 ```{r setup}
 library(FIMSdiags)
 library(FIMS)
+devtools::load_all()
 clear()
 ```
 
