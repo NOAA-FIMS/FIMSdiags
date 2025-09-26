@@ -1,4 +1,31 @@
 url: https://expert-barnacle-zr8w61g.pages.github.io/
+
+navbar:
+  title: "FIMSdiags"
+  left:
+    - icon: fa-github
+      href: https://github.com/NOAA-FIMS/FIMSdiags
+    - text: "Vignettes"
+      menu:
+      - text: "Retrospective Analysis"
+        href: articles/retrospective.html
+      - text: "Likelihood Profile"
+        href: articles/likelihood_profile.html
+    - text: "Functions"
+      href: reference/index.html
+
+home:
+  title: FIMSdiags
+  links:
+  - text: Browse source code
+    href: https://github.com/NOAA-FIMS/FIMSdiags/tree/main/R
+  - text: Report a bug
+    href: https://github.com/NOAA-FIMS/FIMSdiags/issues
+  - text: Learn about FIMS
+    href: https://noaa-fims.github.io/
+
+authors:
+
 template:
   bootstrap: 5
 
