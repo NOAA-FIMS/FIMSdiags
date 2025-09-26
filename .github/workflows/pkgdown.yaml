@@ -48,9 +48,20 @@ jobs:
           renv::restore()
         shell: Rscript {0}
 
-      - name: Install pkgdown
+      - name: Install dependencies and current package
         run: |
+          # Install pkgdown
           renv::install("pkgdown")
+          
+          # Install the current package (FIMSdiags) from source
+          install.packages(".", repos = NULL, type = "source", dependencies = TRUE)
+        shell: Rscript {0}
+
+      - name: Verify package installation
+        run: |
+          # Check that FIMSdiags is properly installed
+          library(FIMSdiags)
+          cat("FIMSdiags version:", as.character(packageVersion("FIMSdiags")), "\n")
         shell: Rscript {0}
 
       - name: Build site
