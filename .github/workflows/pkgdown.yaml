@@ -34,7 +34,19 @@ jobs:
         with:
           use-public-rspm: true
 
-      - uses: r-lib/actions/setup-renv@v1
+      - name: Cache renv packages
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/R/renv
+          key: ${{ runner.os }}-renv-${{ hashFiles('**/renv.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-renv-
+
+      - name: Restore renv snapshot
+        run: |
+          if (!require("renv")) install.packages("renv")
+          renv::restore()
+        shell: Rscript {0}
 
       - name: Install pkgdown
         run: |
