@@ -4,14 +4,14 @@ library(FIMS)
 #'
 #' This function runs a likelihood profile for a FIMS model by fixing a specified parameter at a range of values spanning the initial value.
 #'
-#' @param model Output from [fit_fims()], currently only used to get the estimated value for log_rzero.
+#' @param model Output from [estimate_fims()], currently only used to get the estimated value for log_rzero.
 #' @param parameters A FIMS parameters object containing the model parameters.
 #' @param data A dataframe or tibble containing the model data, or a FIMSFrame object.
 #' @param parameter_label A string specifying the parameter to profile over, e.g., "log_rzero".
 #' @param min The minimum value for the parameter profile relative to the initial value.
 #' @param max The maximum value for the parameter profile relative to the initial value.
 #' @param length The number of values to generate between `min` and `max`. An odd number is recommended to include the initial value.
-#' @return A list containing the vector of parameter values and a dataframe with the fits for each model.
+#' @return A list containing the vector of parameter values and a dataframe with the estimates for each model.
 #' @export
 
 run_fims_likelihood <- function(
@@ -57,7 +57,7 @@ run_fims_likelihood <- function(
   on.exit(future::plan(future::sequential), add = TRUE)
 
   # run FIMS in parallel for each of the likelihood profile values
-  fits <- furrr::future_map(
+  estimates <- furrr::future_map(
     .x = vec,
     .f = run_modified_pars_fims,
     parameter_name = parameter_label, 
@@ -66,18 +66,18 @@ run_fims_likelihood <- function(
     data = data
   )
 
-# pull the fits tibble out of each of the FIMSFit S4 objects into a list
-fits_list <- lapply(fits, function(fit) fit@fits)
+# pull the estimates tibble out of each of the FIMSFit S4 objects into a list
+estimates_list <- lapply(estimates, function(estimate) estimate@estimates)
 
-# adding the fixed parameter value to the fits tibble for each of the models
-for (i in seq_along(fits_list)) {
+# adding the fixed parameter value to the estimates tibble for each of the models
+for (i in seq_along(estimates_list)) {
   # create a new column name based on the profile parameter
   # this could be extended to profile over multiple dimensions parameters
   colname <- paste0("value_", parameter_label)
-  fits_list[[i]][[colname]] <- vec[i]
+  estimates_list[[i]][[colname]] <- vec[i]
 }
 # combine the separate tibbles in the list into one longer tibble
-fits_df <- do.call(rbind, fits_list)
+estimates_df <- do.call(rbind, estimates_list)
 
-  return(list("vec" = vec, "fits" = fits_df))
+  return(list("vec" = vec, "estimates" = estimates_df))
 }

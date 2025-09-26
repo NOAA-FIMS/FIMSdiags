@@ -9,9 +9,12 @@
 #' @return ggplot of likelihood profile
 #' @export 
 plot_likelihood <- function(like_fit, group = "label") {
-
+ # check that like_fit is actually the output from fims_likelihood()
+ if (!"vec" %in% names(like_fit) | !"estimates" %in% names(like_fit)) {
+  cli::cli_abort("like_fit needs to be a list returned by `fims_likelihood()` that contains `vec` and `estimates`")
+ }
  # get column name for parameter being profiled
-  colname <- like_fit$fits |> names() |> grep(pattern = "value_", value = TRUE)
+  colname <- like_fit$estimates |> names() |> grep(pattern = "value_", value = TRUE)
   if (length(colname) > 1) {
     cli::cli_abort("Function doesn't yet support multiple profile parameters")
   }
@@ -25,9 +28,11 @@ plot_likelihood <- function(like_fit, group = "label") {
   # then use that column for grouping below
   
   # summing total likelihood by parameter value, use later for plotting
-  by_type <- like_fit$fits |>
-    dplyr::group_by(.data[[colname]], .data[[group]]) |>
-    dplyr::summarise(total_like = -sum(log_like)) # negative to make negative log likelihood
+  by_type <- like_fit$estimates |>
+    dplyr::filter(!is.na(lpdf)) |>
+    dplyr::group_by(.data[[colname]], .data[[group]]) |> # need to group by fleet, but it's not present in tibble at the moment
+    dplyr::distinct(lpdf) |>
+    dplyr::summarise(total_like = sum(lpdf))  # TODO: make sure lpdf is the value we want to use
 
   ### add total likelihood across all groups (TODO: turned off for now while we sort out new group column)
   # total <- like_fit$fits |>
