@@ -43,7 +43,10 @@ run_modified_data_fims <- function(years_to_remove = 0, data, parameters) {
     #User supplies parameters from base model
     fit <- parameters |>
         initialize_fims(data = data_model) |>
-        fit_fims(optimize = TRUE) #TODO: getting error when removing years of data from json (maybe would be fixed if using the dev-json-caa branch? right now on dev branch)
+        fit_fims(optimize = TRUE) #TODO: Error: parse error: after array element, I expect ',' or ']'
+                                         #  "-999""uncertainty": [
+                                         #  (right here) ------^
+    
     return(fit)
 }
 
