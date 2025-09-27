@@ -35,15 +35,18 @@ plot_likelihood <- function(like_fit, group = "label") {
     dplyr::summarise(total_like = sum(lpdf))  # TODO: make sure lpdf is the value we want to use
 
   ### add total likelihood across all groups (TODO: turned off for now while we sort out new group column)
-  # total <- like_fit$fits |>
-  #   dplyr::group_by(.data[[colname]]) |>
-  #   dplyr::summarise(total_like = -sum(log_like)) |> # negative to make negative log likelihood
-  #   dplyr::mutate(label = "Total") |>
-  #   dplyr::select(.data[[colname]], label, total_like)
+  total <- like_fit$estimates |>
+    dplyr::filter(!is.na(lpdf)) |>
+    dplyr::group_by(.data[[colname]]) |>
+    dplyr::distinct(lpdf) |>
+    dplyr::summarise(total_like = sum(lpdf)) |> # negative to make negative log likelihood
+    dplyr::mutate(label = "Total") |>
+    dplyr::select(.data[[colname]], label, total_like)
 
   # group the data type totals and the overall total and then
   # for each vector of sums, subtract the minimum across within that vector
-  grouped_like <- by_type |> # rbind(by_type, total) |>
+  grouped_like <- by_type |>  
+    dplyr::bind_rows(total) |>
     dplyr::arrange(.data[[colname]]) |>
     dplyr::group_by(.data[[group]]) |>
     dplyr::mutate(total_like_change = total_like - min(total_like))

@@ -7,7 +7,7 @@ library(FIMS)
 #' @param model Output from [estimate_fims()], currently only used to get the estimated value for log_rzero.
 #' @param parameters A FIMS parameters object containing the model parameters.
 #' @param data A dataframe or tibble containing the model data, or a FIMSFrame object.
-#' @param parameter_label A string specifying the parameter to profile over, e.g., "log_rzero".
+#' @param parameter_name A string specifying the parameter to profile over, e.g., "log_rzero".
 #' @param min The minimum value for the parameter profile relative to the initial value.
 #' @param max The maximum value for the parameter profile relative to the initial value.
 #' @param length The number of values to generate between `min` and `max`. An odd number is recommended to include the initial value.
@@ -19,7 +19,7 @@ run_fims_likelihood <- function(
   parameters,
   data,
   module_name = NULL,
-  parameter_label = "log_rzero",
+  parameter_name = "log_rzero",
   min = -2,
   max = 2,
   length = 5
@@ -30,18 +30,18 @@ run_fims_likelihood <- function(
 
   init <- parameters |>
     tidyr::unnest(cols = data) |>
-    dplyr::filter(label == parameter_label) |>
+    dplyr::filter(label == parameter_name) |>
     dplyr::pull(value)
 
     if (!is.null(module_name)) {
     parameter_row <- parameters |> 
       tidyr::unnest(cols = data) |>
-      dplyr::filter(.data$module_name == module_name & label == parameter_label) 
+      dplyr::filter(.data$module_name == module_name & label == parameter_name) 
 
   } else {
     parameter_row <- parameters |>
       tidyr::unnest(cols = data) |> 
-      dplyr::filter(label == parameter_label) 
+      dplyr::filter(label == parameter_name) 
   }
 
   vec <- values + init
@@ -60,7 +60,7 @@ run_fims_likelihood <- function(
   estimates <- furrr::future_map(
     .x = vec,
     .f = run_modified_pars_fims,
-    parameter_name = parameter_label, 
+    parameter_name = parameter_name, 
     module_name = module_name,
     parameters = parameters,
     data = data
@@ -73,7 +73,7 @@ estimates_list <- lapply(estimates, function(estimate) estimate@estimates)
 for (i in seq_along(estimates_list)) {
   # create a new column name based on the profile parameter
   # this could be extended to profile over multiple dimensions parameters
-  colname <- paste0("value_", parameter_label)
+  colname <- paste0("value_", parameter_name)
   estimates_list[[i]][[colname]] <- vec[i]
 }
 # combine the separate tibbles in the list into one longer tibble

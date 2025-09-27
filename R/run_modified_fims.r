@@ -48,6 +48,7 @@ run_modified_pars_fims <- function(
 
   # Update value
   parameter_row$value <- new_value 
+  parameter_row$estimation_type <- "constant"
   parameters_mod <- parameters |> 
     dplyr::rows_update(
       parameter_row,
@@ -61,5 +62,6 @@ run_modified_pars_fims <- function(
     fit_fims(optimize = TRUE)
 
   clear()
+
   return(new_fit)
 }
