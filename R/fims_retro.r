@@ -29,7 +29,7 @@ run_modified_data_fims <- function(years_to_remove = 0, data, parameters) {
         data_mod <- data |>
             dplyr::filter(
                 (type %in% c("age-to-length-conversion", "weight-at-age")) |
-                    dateend <= max(dateend) - lubridate::years(years_to_remove)
+                    dateend <= max(dateend) - lubridate::years(years_to_remove) #TODO update this line to reflect new code/names
             )
     }
     # convert to FIMSFrame format
@@ -63,7 +63,15 @@ run_modified_data_fims <- function(years_to_remove = 0, data, parameters) {
 run_fims_retrospective <- function(years_to_remove, data, parameters) {
     # Set up parallel processing
     n_cores <- parallel::detectCores() - 1
-    future::plan(future::multisession, workers = n_cores)
+    
+    if (Sys.info()['sysname'] == 'Windows') {
+        future::plan(future::multisession, workers = n_cores)
+        message("...Running in parallel with multisession")
+        } else {
+        # Use multicore for Linux/macOS for better performance
+        future::plan(future::multicore, workers = n_cores)
+        message("...Running in parallel with multicore")
+        }
     on.exit(future::plan(future::sequential), add = TRUE)
 
     # Run retro analyses in parallel
@@ -74,7 +82,7 @@ run_fims_retrospective <- function(years_to_remove, data, parameters) {
         parameters = parameters
     )
 
-    estimates_list <- lapply(retro_fits, function(fit) fit@estimates)
+    estimates_list <- lapply(retro_fits, function(fit) fit@estimates) #TODO: fix this to use get_estimates(retro_fits)
 
     for (i in seq_along(estimates_list)) {
         estimates_list[[i]]$retro_year <- years_to_remove[i]

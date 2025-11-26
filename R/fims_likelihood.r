@@ -28,11 +28,13 @@ run_fims_likelihood <- function(
   # calculate vector
   values = seq(min, max, length = length)
 
+  #TODO: can now get this from get_estimates(model) |> dplyr::filter(label == parameter_name) |> pull(estimated)
   init <- parameters |>
     tidyr::unnest(cols = data) |>
     dplyr::filter(label == parameter_name) |>
     dplyr::pull(value)
 
+    #TODO: update these to pull from get_estimates(model) as well
     if (!is.null(module_name)) {
     parameter_row <- parameters |> 
       tidyr::unnest(cols = data) |>
@@ -52,7 +54,16 @@ run_fims_likelihood <- function(
 
   # Set number of cores to use 
   n_cores <- parallel::detectCores() - 1
-  future::plan(future::multisession, workers = n_cores)
+
+  if (Sys.info()['sysname'] == 'Windows') {
+        future::plan(future::multisession, workers = n_cores)
+        message("...Running in parallel with multisession")
+      } else {
+        # Use multicore for Linux/macOS for better performance
+        future::plan(future::multicore, workers = n_cores)
+        message("...Running in parallel with multicore")
+      }
+
   # Ensure cleanup happens 
   on.exit(future::plan(future::sequential), add = TRUE)
 
@@ -67,7 +78,7 @@ run_fims_likelihood <- function(
   )
 
 # pull the estimates tibble out of each of the FIMSFit S4 objects into a list
-estimates_list <- lapply(estimates, function(estimate) estimate@estimates)
+estimates_list <- lapply(estimates, function(estimate) estimate@estimates) #TODO: change to get_estimates
 
 # adding the fixed parameter value to the estimates tibble for each of the models
 for (i in seq_along(estimates_list)) {
