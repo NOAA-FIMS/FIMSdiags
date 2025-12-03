@@ -14,6 +14,33 @@ library(FIMS)
 #' @param length The number of values to generate between `min` and `max`. An odd number is recommended to include the initial value.
 #' @return A list containing the vector of parameter values and a dataframe with the estimates for each model.
 #' @export
+#' 
+#' @examples 
+#' \dontrun{
+#'  library(FIMS)
+#' # Use built-in dataset from FIMS
+#'  data("data1")
+#'  data_4_model <- FIMSFrame(data1)
+#' # Create a parameters object
+#'  parameters <- data_4_model |>
+#'    create_default_configurations() |>
+#'    create_default_parameters(data = data_4_model)
+#' # Run the  model with optimization
+#'  base_model <- parameters |>
+#'    initialize_fims(data = data_4_model) |>
+#'    fit_fims(optimize = TRUE)
+#'  like_fit <- run_fims_likelihood(
+#'    model = base_model,
+#'    parameters = parameters,
+#'    parameter_name = "log_rzero",
+#'    data = data1,
+#'    n_cores = 3,
+#'    min = -1,
+#'    max = 1,
+#'    length = 3
+#'   )
+#'
+#' }
 
 run_fims_likelihood <- function(
   model,

@@ -8,6 +8,25 @@
 #' @param n_cores The number of cores to use to run likelihood profile in parallel. Default is `parallel::detectCores() - 1`.
 #' @return A list containing the vector of parameter values and a dataframe of estimates from each retrospective peel
 #' @export
+#' 
+#' @examples 
+#' \dontrun{
+#'  library(FIMS)
+#' # Use built-in dataset from FIMS
+#'  data("data1")
+#' # Create a parameters object
+#'  parameters <- data_4_model |>
+#'    create_default_configurations() |>
+#'    create_default_parameters(data = data_4_model)
+#'
+#'  fit1 <- run_fims_retrospective(
+#'    years_to_remove = 1,
+#'    data = data1,
+#'    parameters = parameters,
+#'    n_cores = 1
+#'   )
+#'
+#' }
 
 run_fims_retrospective <- function(
     years_to_remove, 

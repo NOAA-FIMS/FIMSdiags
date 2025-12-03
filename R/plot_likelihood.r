@@ -8,6 +8,20 @@
 #' 
 #' @return ggplot of likelihood profile
 #' @export 
+#' 
+#' @examples 
+#' \dontrun{
+#' like_fit <- run_fims_likelihood(
+#'  model = base_model,
+#'  parameters = parameters,
+#'  data = data1,
+#'  n_cores = 3,
+#'  min = -1,
+#'  max = 1,
+#'  length = 3
+#'  )
+#'plot_likelihood(like_fit)
+#' }
 plot_likelihood <- function(like_fit, group = "label") {
  # check that like_fit is actually the output from fims_likelihood()
  if (!"vec" %in% names(like_fit) | !"estimates" %in% names(like_fit)) {

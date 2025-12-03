@@ -9,12 +9,28 @@
 #'
 #' @return FIMS model fitted to the new parameter input value
 #' @export
+#' 
+#' @examples 
+#' \dontrun{
+#'  library(FIMS)
+#' # Use built-in dataset from FIMS
+#'  data("data1")
+#'  data_4_model <- FIMSFrame(data1)
+#' # Create a parameters object
+#'  parameters <- data_4_model |>
+#'  create_default_configurations() |>
+#'  create_default_parameters(data = data_4_model)
+#' # Fit a FIMS model with 1 year of data removed
+#'  fit <- run_modified_pars_fims(new_value = 12.9, 
+#'    parameter_name = "log_rzero", 
+#'    parameters = parameters, data = data1)
+#' }
 
 run_modified_pars_fims <- function(
   new_value, 
   parameter_name,
   module_name = NULL,
-  parameters, #TODO: replace parameters and input with fitted FIMS model once tibbles are avaialble in FIMS fit object 
+  parameters,  
   data) {
 
   # Need to load packages for each worker for furrr functions
@@ -76,6 +92,20 @@ run_modified_pars_fims <- function(
 #' @param parameters input parameters used in base FIMS model
 #' @return FIMS model fitted with years of data removed
 #' @export
+#' 
+#' @examples 
+#' \dontrun{
+#'  library(FIMS)
+#' # Use built-in dataset from FIMS
+#'  data("data1")
+#'  data_4_model <- FIMSFrame(data1)
+#' # Create a parameters object
+#'  parameters <- data_4_model |>
+#'  create_default_configurations() |>
+#'  create_default_parameters(data = data_4_model)
+#' # Fit a FIMS model with 1 year of data removed
+#'  fit <- run_modified_data_fims(years_to_remove = 1, data = data1, parameters = parameters)
+#' }
 
 run_modified_data_fims <- function(years_to_remove = 0, data, parameters) {
     # Need to load packages for each worker for furrr functions

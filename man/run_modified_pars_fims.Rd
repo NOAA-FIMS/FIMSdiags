@@ -31,3 +31,19 @@ FIMS model fitted to the new parameter input value
 Modify a parameter input and run a FIMS model
 This function is called by run_fims_likelihood()
 }
+\examples{
+\dontrun{
+ library(FIMS)
+# Use built-in dataset from FIMS
+ data("data1")
+ data_4_model <- FIMSFrame(data1)
+# Create a parameters object
+ parameters <- data_4_model |>
+ create_default_configurations() |>
+ create_default_parameters(data = data_4_model)
+# Fit a FIMS model with 1 year of data removed
+ fit <- run_modified_pars_fims(new_value = 12.9, 
+   parameter_name = "log_rzero", 
+   parameters = parameters, data = data1)
+}
+}

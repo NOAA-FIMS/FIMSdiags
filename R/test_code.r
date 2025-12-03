@@ -76,7 +76,12 @@ data2 <- data1 |>
             )
 
 # Check that run_fims_model() can use same parameters as base model and produce the same output
-fit0 <- run_fims_retrospective(years_to_remove = 0, data = data1, parameters = parameters)
+fit0 <- run_fims_retrospective(
+  years_to_remove = 0, 
+  data = data1, 
+  parameters = parameters, 
+  n_cores = 1
+  )
 
 
 # new code on dev branch 2025-09-16

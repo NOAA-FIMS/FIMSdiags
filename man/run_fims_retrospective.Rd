@@ -24,3 +24,22 @@ A list containing the vector of parameter values and a dataframe of estimates fr
 Function runs a retrospective analysis for a FIMS model based on a vector of
 years to be removed from the data
 }
+\examples{
+\dontrun{
+ library(FIMS)
+# Use built-in dataset from FIMS
+ data("data1")
+# Create a parameters object
+ parameters <- data_4_model |>
+   create_default_configurations() |>
+   create_default_parameters(data = data_4_model)
+
+ fit1 <- run_fims_retrospective(
+   years_to_remove = 1,
+   data = data1,
+   parameters = parameters,
+   n_cores = 1
+  )
+
+}
+}
