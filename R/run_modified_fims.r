@@ -67,3 +67,55 @@ run_modified_pars_fims <- function(
 
   return(new_fit)
 }
+
+#' Function to remove a given number of years of data and run FIMS model
+#' This function is called by run_fims_retrospective()
+#'
+#' @param years_to_remove number of years to remove
+#' @param data full dataset used in base model run
+#' @param parameters input parameters used in base FIMS model
+#' @return FIMS model fitted with years of data removed
+#' @export
+
+run_modified_data_fims <- function(years_to_remove = 0, data, parameters) {
+    # Need to load packages for each worker for furrr functions
+    require(FIMS, quietly = TRUE)
+    require(dplyr, quietly = TRUE)
+    require(lubridate, quietly = TRUE)
+    require(cli, quietly = TRUE)
+
+    # check if the input is a FIMSframe object and if so, extract the data
+    # this is to avoid the warning:
+    #   no applicable method for 'filter' applied to an object of class "FIMSFrame"
+    if ("FIMSFrame" %in% is(data)) {
+        data <- data@data
+    }
+
+    # Remove years from data
+    if (years_to_remove == 0) {
+        data_mod <- data
+    } else {
+        data_mod <- data |>
+            dplyr::filter(
+                (type %in% c("age-to-length-conversion", "weight-at-age")) |
+                    timing <= max(timing) - years_to_remove 
+            )
+    }
+    # convert to FIMSFrame format
+    data_model <- FIMSFrame(data_mod)
+
+    # report the year removed being run
+    cli::cli_alert_info(
+        "running model with {paste(years_to_remove, collapse = ', ')} years of data removed"
+    )
+
+    #User supplies parameters from base model
+    fit <- parameters |>
+        initialize_fims(data = data_model) |>
+        fit_fims(optimize = TRUE) #TODO: Error: parse error: after array element, I expect ',' or ']'
+                                         #  "-999""uncertainty": [
+                                         #  (right here) ------^
+    
+    return(fit)
+}
+
