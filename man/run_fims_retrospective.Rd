@@ -5,7 +5,7 @@
 \title{Function runs a retrospective analysis for a FIMS model based on a vector of
 years to be removed from the data}
 \usage{
-run_fims_retrospective(years_to_remove, data, parameters)
+run_fims_retrospective(years_to_remove, data, parameters, n_cores = NULL)
 }
 \arguments{
 \item{years_to_remove}{vector of number of years to remove (e.g. if you want to
@@ -14,6 +14,8 @@ do 5 peels, years_to_remove = 0:5)}
 \item{data}{full dataset used in base model run}
 
 \item{parameters}{input parameters used in base FIMS model}
+
+\item{n_cores}{The number of cores to use to run likelihood profile in parallel. Default is \code{parallel::detectCores() - 1}.}
 }
 \value{
 A list containing the vector of parameter values and a dataframe of estimates from each retrospective peel
