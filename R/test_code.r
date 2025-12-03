@@ -56,6 +56,7 @@ like_fit <- run_fims_likelihood(
   model = base_model,
   parameters = parameters,
   data = data1,
+  n_cores = 3,
   min = -1,
   max = 1,
   length = 3
