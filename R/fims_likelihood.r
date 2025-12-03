@@ -75,11 +75,12 @@ run_fims_likelihood <- function(
     parameter_name = parameter_name, 
     module_name = module_name,
     parameters = parameters,
-    data = data
+    data = data,
+    .options = furrr::furrr_options(seed = TRUE, globals = TRUE)
   )
 
 # pull the estimates tibble out of each of the FIMSFit S4 objects into a list
-estimates_list <- lapply(estimates, get_estimates) 
+estimates_list <- purrr::map(estimates, get_estimates) 
 
 # adding the fixed parameter value to the estimates tibble for each of the models
 for (i in seq_along(estimates_list)) {
