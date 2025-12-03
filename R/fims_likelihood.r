@@ -8,6 +8,7 @@ library(FIMS)
 #' @param parameters A FIMS parameters object containing the model parameters.
 #' @param data A dataframe or tibble containing the model data, or a FIMSFrame object.
 #' @param parameter_name A string specifying the parameter to profile over, e.g., "log_rzero".
+#' @param n_cores The number of cores to use to run likelihood profile in parallel. Default is `parallel::detectCores() - 1`.
 #' @param min The minimum value for the parameter profile relative to the initial value.
 #' @param max The maximum value for the parameter profile relative to the initial value.
 #' @param length The number of values to generate between `min` and `max`. An odd number is recommended to include the initial value.
@@ -20,6 +21,7 @@ run_fims_likelihood <- function(
   data,
   module_name = NULL,
   parameter_name = "log_rzero",
+  n_cores = NULL,
   min = -2,
   max = 2,
   length = 5
@@ -28,13 +30,10 @@ run_fims_likelihood <- function(
   # calculate vector
   values = seq(min, max, length = length)
 
-  #TODO: can now get this from get_estimates(model) |> dplyr::filter(label == parameter_name) |> pull(estimated)
-  init <- parameters |>
-    tidyr::unnest(cols = data) |>
-    dplyr::filter(label == parameter_name) |>
-    dplyr::pull(value)
+  init <- get_estimates(model) |> 
+    dplyr::filter(label == parameter_name) |> 
+    dplyr::pull(estimated) #NOTE: input and estimated value are slightly different (even though its fixed) input = 13.8155, estimated = 13.857
 
-    #TODO: update these to pull from get_estimates(model) as well
     if (!is.null(module_name)) {
     parameter_row <- parameters |> 
       tidyr::unnest(cols = data) |>
@@ -53,7 +52,9 @@ run_fims_likelihood <- function(
   )
 
   # Set number of cores to use 
-  n_cores <- parallel::detectCores() - 1
+  if(is.null(n_cores)){
+    n_cores <- parallel::detectCores() - 1
+  }
 
   if (Sys.info()['sysname'] == 'Windows') {
         future::plan(future::multisession, workers = n_cores)
@@ -78,7 +79,7 @@ run_fims_likelihood <- function(
   )
 
 # pull the estimates tibble out of each of the FIMSFit S4 objects into a list
-estimates_list <- lapply(estimates, function(estimate) estimate@estimates) #TODO: change to get_estimates
+estimates_list <- lapply(estimates, get_estimates) 
 
 # adding the fixed parameter value to the estimates tibble for each of the models
 for (i in seq_along(estimates_list)) {
