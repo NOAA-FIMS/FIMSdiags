@@ -9,20 +9,23 @@ run_fims_likelihood(
   parameters,
   data,
   module_name = NULL,
-  parameter_label = "log_rzero",
+  parameter_name = "log_rzero",
+  n_cores = NULL,
   min = -2,
   max = 2,
   length = 5
 )
 }
 \arguments{
-\item{model}{Output from \code{\link[=fit_fims]{fit_fims()}}, currently only used to get the estimated value for log_rzero.}
+\item{model}{Output from \code{\link[=estimate_fims]{estimate_fims()}}, currently only used to get the estimated value for log_rzero.}
 
 \item{parameters}{A FIMS parameters object containing the model parameters.}
 
 \item{data}{A dataframe or tibble containing the model data, or a FIMSFrame object.}
 
-\item{parameter_label}{A string specifying the parameter to profile over, e.g., "log_rzero".}
+\item{parameter_name}{A string specifying the parameter to profile over, e.g., "log_rzero".}
+
+\item{n_cores}{The number of cores to use to run likelihood profile in parallel. Default is \code{parallel::detectCores() - 1}.}
 
 \item{min}{The minimum value for the parameter profile relative to the initial value.}
 
@@ -31,7 +34,7 @@ run_fims_likelihood(
 \item{length}{The number of values to generate between \code{min} and \code{max}. An odd number is recommended to include the initial value.}
 }
 \value{
-A list containing the vector of parameter values and a dataframe with the fits for each model.
+A list containing the vector of parameter values and a dataframe with the estimates for each model.
 }
 \description{
 This function runs a likelihood profile for a FIMS model by fixing a specified parameter at a range of values spanning the initial value.
