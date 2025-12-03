@@ -18,10 +18,12 @@ run_modified_pars_fims <- function(
   data) {
 
   # Need to load packages for each worker for furrr functions
-  require(FIMS, quietly = TRUE)
-  require(dplyr, quietly = TRUE)
-  require(tidyr, quietly = TRUE)
-  require(cli, quietly = TRUE)
+  suppressPackageStartupMessages({
+    require(FIMS, quietly = TRUE)
+    require(dplyr, quietly = TRUE)
+    require(tidyr, quietly = TRUE)
+    require(cli, quietly = TRUE)
+  })
 
  # if parameters is nested, then unnest
   if ("data" %in% names(parameters)) {
