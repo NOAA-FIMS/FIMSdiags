@@ -59,7 +59,7 @@ run_fims_retrospective <- function(
     )
 
     # pull the estimates tibble out of each of the FIMSFit S4 objects into a list
-    estimates_list <- purrr::map(estimates, get_estimates)
+    estimates_list <- purrr::map(retro_fits, get_estimates)
 
     for (i in seq_along(estimates_list)) {
         estimates_list[[i]]$retro_year <- years_to_remove[i]
