@@ -34,6 +34,9 @@ jobs:
         with:
           use-public-rspm: true
 
+      - name: Install system dependencies
+        run: - sudo apt install libcairo2-dev libcurl4-openssl-dev libfontconfig1-dev libfreetype6-dev libgit2-dev libjpeg-dev libpoppler-cpp-dev libx11-dev pandoc
+
       - name: Cache renv packages
         uses: actions/cache@v4
         with:
