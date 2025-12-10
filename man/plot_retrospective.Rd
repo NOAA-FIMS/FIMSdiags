@@ -4,11 +4,13 @@
 \alias{plot_retrospective}
 \title{Plot retrospective analysis of spawning biomass and fishing mortality}
 \usage{
-plot_retrospective(estimates_df)
+plot_retrospective(retro_fit, quantity = c("spawning_biomass", "mortality_F"))
 }
 \arguments{
-\item{estimates_df}{Dataframe returned by the \code{\link[=run_fims_retrospective]{run_fims_retrospective()}} function with
-model fits for each peel in a retrospective analysis}
+\item{retro_fit}{List returned by the \code{\link[=run_fims_retrospective]{run_fims_retrospective()}} function with
+the years to remove and estimates dataframe from a FIMS model}
+
+\item{quantity}{A vector of the quantity to plot, "spawning_biomass" and/or "mortality_F".}
 }
 \value{
 ggplot of SSB and F for each retrospective peel

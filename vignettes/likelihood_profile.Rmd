@@ -10,7 +10,10 @@ vignette: >
 ```{r, include = FALSE}
 knitr::opts_chunk$set(
   collapse = TRUE,
-  comment = "#>"
+  comment = "#>",
+  fig.width = 9,
+  fig.height = 7,
+  out.width = "100%"
 )
 
 ```
@@ -19,6 +22,8 @@ knitr::opts_chunk$set(
 library(FIMSdiags)
 library(FIMS)
 #devtools::load_all()
+packageVersion("FIMS")
+
 clear()
 ```
 
@@ -26,6 +31,7 @@ clear()
 Following the minimal demo vignette, we will set up a FIMS model and run it.  
 
 ```{r run_fims_model}
+
 # Load sample data
 data("data1")
 # Prepare data for FIMS model
@@ -46,17 +52,22 @@ clear()
 ```
 
 ## Run likelihood profile  
-
+Once we have a model that is fit, we can run a likelihood analysis to see the impact of each data type on a given parameter. In this example, we will test the impact on R0 but any value can be tested by changing the `parameter_name` argument. The parameter name must match what is 
 ```{r like_profile}
+#| message: false
+#| warning: false
 
 like_fit <- run_fims_likelihood(
   model = base_model,
   parameters = parameters,
+  parameter_name = "log_rzero", 
   data = data1,
   min = -1,
   max = 1,
-  length = 3
+  length = 10
 )
 
 plot_likelihood(like_fit)
+
+clear()
 ```

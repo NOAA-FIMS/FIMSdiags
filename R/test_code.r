@@ -51,7 +51,8 @@ base_model@obj$par
 
 
 # call the likelihood profile function defined in R/fims_likelihood.r
-# devtools::load_all()
+devtools::load_all()
+
 like_fit <- run_fims_likelihood(
   model = base_model,
   parameters = parameters,
@@ -59,7 +60,7 @@ like_fit <- run_fims_likelihood(
   n_cores = 3,
   min = -1,
   max = 1,
-  length = 3
+  length = 5
 )
 
 plot_likelihood(like_fit)
@@ -76,12 +77,26 @@ data2 <- data1 |>
             )
 
 # Check that run_fims_model() can use same parameters as base model and produce the same output
-fit0 <- run_fims_retrospective(
+retro_fit <- run_fims_retrospective(
   years_to_remove = 0, 
   data = data1, 
   parameters = parameters, 
   n_cores = 1
   )
+
+# to debug for json errors: 
+#Error:   i In index: 1.
+#Caused by error:
+#! lexical error: invalid string in json text.
+                      #  "uncertainty": nan,
+                      #  (right here) ----^
+debug(FIMSFit)
+    fit <- parameters |>
+        initialize_fims(data = data_model) |>
+        fit_fims(optimize = TRUE)
+# keep hitting n through the browser steps until you get to 
+# 459: json_estimates <- reshape_json_estimates(model_output)
+# then before going to the next step (n), run `write(model_output, file = "output.json")`
 
 
 # new code on dev branch 2025-09-16

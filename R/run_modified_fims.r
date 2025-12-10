@@ -140,6 +140,7 @@ run_modified_data_fims <- function(years_to_remove = 0, data, parameters) {
     )
 
     #User supplies parameters from base model
+    debug(FIMSFit)
     fit <- parameters |>
         initialize_fims(data = data_model) |>
         fit_fims(optimize = TRUE) #TODO: Error: parse error: after array element, I expect ',' or ']'
@@ -148,4 +149,5 @@ run_modified_data_fims <- function(years_to_remove = 0, data, parameters) {
     
     return(fit)
 }
+
 
