@@ -78,11 +78,22 @@ data2 <- data1 |>
 
 # Check that run_fims_model() can use same parameters as base model and produce the same output
 retro_fit <- run_fims_retrospective(
-  years_to_remove = 0, 
+  years_to_remove = 0:2, 
   data = data1, 
   parameters = parameters, 
   n_cores = 1
   )
+
+library(ggplot2)
+retro_fit[["estimates"]] |>
+dplyr::filter(label == "spawning_biomass") |> 
+dplyr::select(label, year_i, estimated, retro_year) |>
+dplyr::group_by(label, retro_year) |>
+dplyr::filter(dplyr::row_number() <= dplyr::n() - retro_year) |>
+dplyr::ungroup() |> 
+ggplot(aes(x = year_i, y = estimated, group = as.factor(retro_year))) +
+geom_line(aes(color = as.factor(retro_year)), linewidth = 1.2) +
+stockplotr::theme_noaa(discrete = T)
 
 # to debug for json errors: 
 #Error:   i In index: 1.

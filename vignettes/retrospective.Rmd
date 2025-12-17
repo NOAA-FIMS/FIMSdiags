@@ -46,52 +46,41 @@ base_model <- parameters |>
 clear()
 ```
 
-```{r, retro, eval = FALSE}
-retro_fit <- run_fims_likelihood(years_to_remove = 0:2, data_4_model, parameters)
+```{r, retro}
+retro_fit <- run_fims_retrospective(years_to_remove = 0:2, 
+              data_4_model, parameters, 
+              n_cores = 3)
 
 # plot the SSB time series from each model
 # NOTE: this doesn't work because we don't have a year value.
 #       there's a time column but it's empty
 library(ggplot2)
-ggplot(estimates_df, aes(x = year, y = estimate, color = retro_year)) +
-    geom_line() +
-    labs(
-        title = "SSB Time Series by Year Removed",
-        x = "Year",
-        y = "SSB Estimate"
-    ) +
-    theme_minimal()
+retro_fit[["estimates"]] |>
+dplyr::filter(label == "spawning_biomass") |> 
+dplyr::select(label, year_i, estimated, retro_year) |>
+dplyr::group_by(label, retro_year) |>
+dplyr::filter(dplyr::row_number() <= dplyr::n() - retro_year) |>
+dplyr::ungroup() |> 
+ggplot(aes(x = year_i, y = estimated, group = as.factor(retro_year))) +
+geom_line(aes(color = as.factor(retro_year)), linewidth = 1.2) +
+stockplotr::theme_noaa(discrete = T)
 
 
 # get SSB time series from each model
-# using head(10) because the range of years is different among models
-SSBtable <- cbind(
-    fits[[1]]@estimates |>
-        dplyr::filter(label == "SSB") |>
-        dplyr::pull(estimate) |>
-        head(10),
-    fits[[2]]@estimates |>
-        dplyr::filter(label == "SSB") |>
-        dplyr::pull(estimate) |>
-        head(10),
-    fits[[3]]@estimates |>
-        dplyr::filter(label == "SSB") |>
-        dplyr::pull(estimate) |>
-        head(10)
-)
-
 # proof that values are different among models
-SSBtable
-#         [,1]     [,2]     [,3]
-# SSB 6838.698 6825.748 6818.862
-# SSB 6839.828 6827.363 6819.676
-# SSB 6790.398 6778.632 6769.959
-# SSB 6590.985 6580.053 6570.594
-# SSB 6334.694 6324.161 6314.831
-# SSB 6120.571 6110.624 6103.179
-# SSB 6058.196 6047.160 6042.686
-# SSB 5568.276 5556.572 5554.346
-# SSB 4569.733 4557.078 4556.954
-# SSB 4711.758 4698.478 4701.322
+# retro_fit[["estimates"]] |>
+#     dplyr::filter(label == "spawning_biomass") |>
+#     dplyr::select(label, year_i, estimated, retro_year) |>
+#     tidyr::pivot_wider(names_from = retro_year, values_from = estimated) |>
+#     tail()
+# SSBtable
+#   label            year_i   `0`   `1`   `2`
+#   <chr>             <int> <dbl> <dbl> <dbl>
+# 1 spawning_biomass     26 2001. 1960. 2213.
+# 2 spawning_biomass     27 1939. 1889. 2201.
+# 3 spawning_biomass     28 1914. 1854. 2232.
+# 4 spawning_biomass     29 1798. 1725. 2153.
+# 5 spawning_biomass     30 1901. 1815. 2623.
+# 6 spawning_biomass     31 1803. 2315. 3115.
 
 ```
