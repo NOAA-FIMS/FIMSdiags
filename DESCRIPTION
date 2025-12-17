@@ -16,5 +16,5 @@ Suggests:
 Config/testthat/edition: 3
 VignetteBuilder: knitr
 URL: https://expert-barnacle-zr8w61g.pages.github.io/
-Imports: 
-    FIMS (>= 0.7.0)
+Remotes: 
+    NOAA-FIMS/FIMS@*release (>= 0.7.0)
