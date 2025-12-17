@@ -14,5 +14,7 @@ jobs:
   call-workflow:
     uses: nmfs-ost/ghactions4r/.github/workflows/r-cmd-check.yml@main
     with:
-      args: --no-build-vignettes
+      additional_args_windows: "--no-build-vignettes"
+      additional_args_macos: "--no-build-vignettes"
+      additional_args_ubuntu: "--no-build-vignettes"
     
