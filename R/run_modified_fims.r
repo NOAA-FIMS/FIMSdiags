@@ -81,8 +81,6 @@ run_modified_pars_fims <- function(
     initialize_fims(data = data_model) |>
     fit_fims(optimize = TRUE)
 
-  clear()
-
   return(new_fit)
 }
 
