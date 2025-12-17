@@ -109,6 +109,8 @@ debug(FIMSFit)
 # 459: json_estimates <- reshape_json_estimates(model_output)
 # then before going to the next step (n), run `write(model_output, file = "output.json")`
 
+debug(get_estimates)
+
 
 # new code on dev branch 2025-09-16
 # depends on running the vignette first to get length_only_fit
