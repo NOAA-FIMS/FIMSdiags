@@ -34,11 +34,13 @@ run_modified_pars_fims <- function(
   data) {
 
   # Need to load packages for each worker for furrr functions
-  suppressPackageStartupMessages({
-    require(FIMS, quietly = TRUE)
-    require(dplyr, quietly = TRUE)
-    require(tidyr, quietly = TRUE)
-    require(cli, quietly = TRUE)
+  suppressWarnings({
+    suppressPackageStartupMessages({
+      require(FIMS, quietly = TRUE)
+      require(dplyr, quietly = TRUE)
+      require(tidyr, quietly = TRUE)
+      require(cli, quietly = TRUE)
+    })
   })
 
  # if parameters is nested, then unnest
@@ -109,11 +111,14 @@ run_modified_pars_fims <- function(
 
 run_modified_data_fims <- function(years_to_remove = 0, data, parameters) {
     # Need to load packages for each worker for furrr functions
-    require(FIMS, quietly = TRUE)
-    require(dplyr, quietly = TRUE)
-    require(lubridate, quietly = TRUE)
-    require(cli, quietly = TRUE)
-
+    suppressWarnings({
+      suppressPackageStartupMessages({
+        require(FIMS, quietly = TRUE)
+        require(dplyr, quietly = TRUE)
+        require(lubridate, quietly = TRUE)
+        require(cli, quietly = TRUE)
+      })
+    })
     # check if the input is a FIMSframe object and if so, extract the data
     # this is to avoid the warning:
     #   no applicable method for 'filter' applied to an object of class "FIMSFrame"
@@ -140,12 +145,9 @@ run_modified_data_fims <- function(years_to_remove = 0, data, parameters) {
     )
 
     #User supplies parameters from base model
-    debug(FIMSFit)
     fit <- parameters |>
         initialize_fims(data = data_model) |>
-        fit_fims(optimize = TRUE) #TODO: Error: parse error: after array element, I expect ',' or ']'
-                                         #  "-999""uncertainty": [
-                                         #  (right here) ------^
+        fit_fims(optimize = TRUE) 
     
     return(fit)
 }
