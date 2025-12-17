@@ -8,5 +8,6 @@
 
 library(testthat)
 library(FIMSdiags)
+library(FIMS)
 
 test_check("FIMSdiags")
