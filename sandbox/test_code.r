@@ -80,6 +80,8 @@ retro_fit <- run_fims_retrospective(
   n_cores = 3
   )
 
+plot_retrospective(retro_fit, quantity = "spawning_biomass")
+
 library(ggplot2)
 retro_fit[["estimates"]] |>
 dplyr::filter(label == "spawning_biomass") |> 

@@ -50,16 +50,24 @@ run_fims_retrospective <- function(
     on.exit(future::plan(future::sequential), add = TRUE)
 
     # Run retro analyses in parallel
-    retro_fits <- furrr::future_map(
+    estimates_list <- furrr::future_map(
         .x = years_to_remove,
-        .f = run_modified_data_fims,
+        .f = function(years){
+            fit <- run_modified_data_fims(
+                years_to_remove = years, 
+                data = data, 
+                parameters = parameters
+            )
+            get_estimates(fit)
+        },
         data = data,
         parameters = parameters,
         .options = furrr::furrr_options(seed = TRUE, globals = TRUE)
     )
 
     # pull the estimates tibble out of each of the FIMSFit S4 objects into a list
-    estimates_list <- purrr::map(retro_fits, get_estimates)
+    # moved into parallel function 
+    # estimates_list <- purrr::map(retro_fits, get_estimates)
 
     for (i in seq_along(estimates_list)) {
         estimates_list[[i]]$retro_year <- years_to_remove[i]
