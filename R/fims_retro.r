@@ -60,8 +60,6 @@ run_fims_retrospective <- function(
             )
             get_estimates(fit)
         },
-        data = data,
-        parameters = parameters,
         .options = furrr::furrr_options(seed = TRUE, globals = TRUE)
     )
 

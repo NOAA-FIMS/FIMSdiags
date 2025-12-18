@@ -48,22 +48,11 @@ clear()
 
 ```{r, retro}
 retro_fit <- run_fims_retrospective(years_to_remove = 0:2, 
-              data_4_model, parameters, 
+              data1, parameters, 
               n_cores = 3)
 
 # plot the SSB time series from each model
-# NOTE: this doesn't work because we don't have a year value.
-#       there's a time column but it's empty
-library(ggplot2)
-retro_fit[["estimates"]] |>
-dplyr::filter(label == "spawning_biomass") |> 
-dplyr::select(label, year_i, estimated, retro_year) |>
-dplyr::group_by(label, retro_year) |>
-dplyr::filter(dplyr::row_number() <= dplyr::n() - retro_year) |>
-dplyr::ungroup() |> 
-ggplot(aes(x = year_i, y = estimated, group = as.factor(retro_year))) +
-geom_line(aes(color = as.factor(retro_year)), linewidth = 1.2) +
-stockplotr::theme_noaa(discrete = T)
+plot_retrospective(retro_fit)
 
 
 # get SSB time series from each model

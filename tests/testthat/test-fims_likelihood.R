@@ -38,7 +38,7 @@ test_that("fims_likelihood() works with correct inputs", {
     model = base_model,
     parameters = parameters,
     data = data1,
-    n_cores = 3,
+    n_cores = 1,
     min = -1,
     max = 1,
     length = 3
