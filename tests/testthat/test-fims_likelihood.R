@@ -44,8 +44,8 @@ test_that("fims_likelihood() works with correct inputs", {
     length = 3
   )
   expect_equal(
-    object = str(like_fit),
-    expected = y
+    object = names(like_fit),
+    expected = c("vec", "estimates")
   )
 
   #' @description Test that fims_likelihood(x) returns y.

@@ -32,6 +32,12 @@ jobs:
           r-version: ${{ matrix.config.r }}
           
       - uses: r-lib/actions/setup-pandoc@v2
+
+      - name: Install macOS system dependencies
+        if: runner.os == 'macOS'
+        run: |
+          brew install gettext
+          brew link gettext --force
       
       - uses: r-lib/actions/setup-r-dependencies@v2
         with:
@@ -43,3 +49,4 @@ jobs:
           upload-snapshots: true
           error-on: '"error"'
           args: 'c("--no-manual", "--no-build-vignettes")'
+          build_args: 'c("--no-build-vignettes", "--no-manual")'
