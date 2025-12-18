@@ -96,9 +96,20 @@ run_fims_likelihood <- function(
   on.exit(future::plan(future::sequential), add = TRUE)
 
   # run FIMS in parallel for each of the likelihood profile values
-  estimates <- furrr::future_map(
+  estimates_list <- furrr::future_map(
     .x = vec,
-    .f = run_modified_pars_fims,
+    .f = function(value, parameter_name, module_name, parameters, data) {
+      # Run the model
+      fit <- run_modified_pars_fims(
+        new_value = value,
+        parameter_name = parameter_name, 
+        module_name = module_name,
+        parameters = parameters,
+        data = data
+      )
+      # Extract estimates immediately while still in worker
+      get_estimates(fit)
+    },
     parameter_name = parameter_name, 
     module_name = module_name,
     parameters = parameters,
@@ -106,19 +117,19 @@ run_fims_likelihood <- function(
     .options = furrr::furrr_options(seed = TRUE, globals = TRUE)
   )
 
-# pull the estimates tibble out of each of the FIMSFit S4 objects into a list
-estimates_list <- purrr::map(estimates, get_estimates) 
+  # pull the estimates tibble out of each of the FIMSFit S4 objects into a list
+  # moved to inside the parallel function so R session doesn't crash
+  #estimates_list <- purrr::map(estimates, get_estimates) 
 
-
-# adding the fixed parameter value to the estimates tibble for each of the models
-for (i in seq_along(estimates_list)) {
-  # create a new column name based on the profile parameter
-  # this could be extended to profile over multiple dimensions parameters
-  colname <- paste0("value_", parameter_name)
-  estimates_list[[i]][[colname]] <- vec[i]
-}
-# combine the separate tibbles in the list into one longer tibble
-estimates_df <- do.call(rbind, estimates_list)
+  # adding the fixed parameter value to the estimates tibble for each of the models
+  for (i in seq_along(estimates_list)) {
+    # create a new column name based on the profile parameter
+    # this could be extended to profile over multiple dimensions parameters
+    colname <- paste0("value_", parameter_name)
+    estimates_list[[i]][[colname]] <- vec[i]
+  }
+  # combine the separate tibbles in the list into one longer tibble
+  estimates_df <- do.call(rbind, estimates_list)
 
   return(list("vec" = vec, "estimates" = estimates_df))
 }

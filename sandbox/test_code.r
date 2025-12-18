@@ -45,19 +45,15 @@ base_model <- parameters |>
   initialize_fims(data = data_4_model) |>
   fit_fims(optimize = TRUE)
 
-# get parameters (revisit this after changes that Bai is making to how parameters are specified)
-FIMS:::get_parameter_names(base_model@obj$env$last.par.best)
-base_model@obj$par
 
-
-# call the likelihood profile function defined in R/fims_likelihood.r
+# load all functions
 devtools::load_all()
 
 like_fit <- run_fims_likelihood(
   model = base_model,
   parameters = parameters,
   data = data1,
-  n_cores = 3,
+  n_cores = 5,
   min = -1,
   max = 1,
   length = 5
@@ -81,7 +77,7 @@ retro_fit <- run_fims_retrospective(
   years_to_remove = 0:2, 
   data = data1, 
   parameters = parameters, 
-  n_cores = 1
+  n_cores = 3
   )
 
 library(ggplot2)
