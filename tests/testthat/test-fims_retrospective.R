@@ -23,8 +23,8 @@ parameters <- data_4_model |>
   create_default_parameters(data = data_4_model)
 
 ## IO correctness ----
-test_that("fims_retrospective() works with correct inputs", {
-  #' @description Test that fims_retrospective(x) returns y.
+test_that("run_fims_retrospective() works with correct inputs", {
+  #' @description Test that run_fims_retrospective(x) returns y.
   
   retro_fit <- run_fims_retrospective(
     years_to_remove = 0:2, 
@@ -64,9 +64,9 @@ retro_ssb <- retro_fit[["estimates"]] |>
 ## Error handling ----
 # Please remove/comment out the test template below if there are no built-in errors/warnings.
 test_that("fims_retrospective() returns correct error messages", {
-  #' @description Test that fims_retrospective(x) returns expected error.
-  expect_error(
-    object = fims_retrospective(x),
-    regexp = "Insert text here that should be in the error message."
-  )
+  # #' @description Test that fims_retrospective(x) returns expected error.
+  # expect_error(
+  #   object = fims_retrospective(x),
+  #   regexp = "Insert text here that should be in the error message."
+  # )
 })
