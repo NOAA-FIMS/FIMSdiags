@@ -7,7 +7,7 @@
 plot_likelihood(like_fit, group = "label")
 }
 \arguments{
-\item{like_fit}{List returned by the \code{\link[=fims_likelihood]{fims_likelihood()}} function with
+\item{like_fit}{List returned by the \code{\link[=run_fims_likelihood]{run_fims_likelihood()}} function with
 model fits for each step in a likelihood profile}
 
 \item{group}{Character string or vector of strings with columns to group by,

@@ -1,6 +1,6 @@
 #' Plot likelihood profile
 
-#' @param like_fit List returned by the [fims_likelihood()] function with
+#' @param like_fit List returned by the [run_fims_likelihood()] function with
 #' model fits for each step in a likelihood profile
 #' @param group Character string or vector of strings with columns to group by, 
 #' e.g., "label" to group by data type, c("label", "fleet_name") to group by data 
