@@ -49,7 +49,7 @@ clear()
 ```{r, retro}
 retro_fit <- run_fims_retrospective(years_to_remove = 0:2, 
               data1, parameters, 
-              n_cores = 3)
+              n_cores = 1)
 
 # plot the SSB time series from each model
 plot_retrospective(retro_fit)
