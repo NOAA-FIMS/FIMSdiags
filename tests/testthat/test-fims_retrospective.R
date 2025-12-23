@@ -40,7 +40,7 @@ test_that("run_fims_retrospective() works with correct inputs", {
 
   #' @description Test that fims_retrospective(x) returns y.
   expect_equal(
-    object = length(retro_fit[["vec"]]),
+    object = length(retro_fit[["years_to_remove"]]),
     expected = 3
   )
 
