@@ -82,17 +82,21 @@ run_fims_likelihood <- function(
     n_cores <- parallel::detectCores() - 1
   }
 
+  n_cores <- as.integer(n_cores)
+
+  if(!is.integer(n_cores) & n_cores > 0){
+    cli::cli_abort("n_cores must be a positive integer. Input was {n_cores}")
+  }
   dplyr::case_when (
     n_cores == 1 ~ future::plan(future::sequential),
     n_cores > 1 & Sys.info()['sysname'] == 'Windows' ~ future::plan(future::multisession, workers = n_cores),
-    n_cores > 1 & Sys.info()['sysname'] != 'Windows' ~ future::plan(future::multicore, workers = n_cores),
-    TRUE ~ cli::cli_abort("n_cores must be a positive integer. Input was {n_cores}")
+    n_cores > 1 & Sys.info()['sysname'] != 'Windows' ~ future::plan(future::multicore, workers = n_cores)
   )
 
   if (n_cores == 1) {
-    message("...Running sequentially on a single core")
+    cli::cli_alert_info("...Running sequentially on a single core")
   } else {
-    message("...Running in parallel on {n_cores} cores")
+    cli::cli_alert_info("...Running in parallel on {n_cores} cores")
   }
 
   # Ensure cleanup happens 
