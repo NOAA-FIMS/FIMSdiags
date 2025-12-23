@@ -1,12 +1,11 @@
-library(FIMS)
-
 #' Run likelihood profile for a FIMS model
 #'
 #' This function runs a likelihood profile for a FIMS model by fixing a specified parameter at a range of values spanning the initial value.
 #'
-#' @param model Output from [estimate_fims()], currently only used to get the estimated value for log_rzero.
+#' @param model Output from [fit_fims()], currently only used to get the estimated value for log_rzero.
 #' @param parameters A FIMS parameters object containing the model parameters.
 #' @param data A dataframe or tibble containing the model data, or a FIMSFrame object.
+#' @param module_name A string specifying the module the parameter being profiled over is in. Default is NULL.
 #' @param parameter_name A string specifying the parameter to profile over, e.g., "log_rzero".
 #' @param n_cores The number of cores to use to run likelihood profile in parallel. Default is `parallel::detectCores() - 1`.
 #' @param min The minimum value for the parameter profile relative to the initial value.

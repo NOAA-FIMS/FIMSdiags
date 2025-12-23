@@ -17,11 +17,13 @@ run_fims_likelihood(
 )
 }
 \arguments{
-\item{model}{Output from \code{\link[=estimate_fims]{estimate_fims()}}, currently only used to get the estimated value for log_rzero.}
+\item{model}{Output from \code{\link[=fit_fims]{fit_fims()}}, currently only used to get the estimated value for log_rzero.}
 
 \item{parameters}{A FIMS parameters object containing the model parameters.}
 
 \item{data}{A dataframe or tibble containing the model data, or a FIMSFrame object.}
+
+\item{module_name}{A string specifying the module the parameter being profiled over is in. Default is NULL.}
 
 \item{parameter_name}{A string specifying the parameter to profile over, e.g., "log_rzero".}
 
