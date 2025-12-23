@@ -65,7 +65,7 @@ test_that("fims_likelihood() works with correct inputs", {
 
   #' @description Test that fims_likelihood(x) returns y.
   expect_equal(
-    object = total$total_like[1]
+    object = total$total_like[1],
     expected = -3231.052
   )
 
