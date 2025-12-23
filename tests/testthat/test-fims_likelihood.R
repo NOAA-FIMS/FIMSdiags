@@ -54,11 +54,21 @@ test_that("fims_likelihood() works with correct inputs", {
     expected = 3
   )
 
+### add total likelihood across all groups (TODO: turned off for now while we sort out new group column)
+  total <- like_fit$estimates |>
+    dplyr::filter(!is.na(lpdf)) |>
+    dplyr::group_by(value_log_rzero) |>
+    dplyr::distinct(lpdf) |>
+    dplyr::summarise(total_like = sum(lpdf)) |> # negative to make negative log likelihood
+    dplyr::mutate(label = "Total") |>
+    dplyr::select(value_log_rzero, label, total_like)
+
   #' @description Test that fims_likelihood(x) returns y.
-  # expect_equal(
-  #   object = like_fit[["estimates"]],
-  #   expected = y
-  # )
+  expect_equal(
+    object = total$total_like[1]
+    expected = -3231.052
+  )
+
 })
 
 ## Edge handling ----
