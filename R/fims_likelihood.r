@@ -53,6 +53,25 @@ run_fims_likelihood <- function(
   length = 5
   # TODO: check inputs to make sure they make sense
 ) {
+  # checking inputs
+  if(length < 1 | as.integer(length) != length) {
+      cli::cli_abort("Input length should be a positive integer ")
+  }
+  
+  if(length > 50){
+    cli::cli_alert_warning("Input length is {length}, are you sure you want it so large?")
+  }
+  
+  if (min >= max) {
+    cli::cli_abort("Input min should be less than max.")
+  }
+  if (min > 0 | max < 0) {
+    cli::cli_warning("Inputs min and max don't span 0. Are you sure this is right?")
+  }
+
+  if(class(model) != "FIMSFit"){
+    cli::cli_abort("Input model needs to be a FIMSFit object.")
+  }
   # calculate vector
   values = seq(min, max, length = length)
 
@@ -61,6 +80,13 @@ run_fims_likelihood <- function(
     dplyr::pull(estimated) #NOTE: input and estimated value are slightly different (even though its fixed) input = 13.8155, estimated = 13.857
 
     if (!is.null(module_name)) {
+    module_names <- parameters |> 
+      tidyr::unnest(cols = data) |> 
+      dplyr::pull(module_name) |> 
+      unique()
+      if(!module_name %in% module_names){
+        cli::cli_abort("Input module_name not found in parameters tibble.")
+      }
     parameter_row <- parameters |> 
       tidyr::unnest(cols = data) |>
       dplyr::filter(.data$module_name == module_name & label == parameter_name) 
@@ -71,6 +97,14 @@ run_fims_likelihood <- function(
       dplyr::filter(label == parameter_name) 
   }
 
+  if(length(parameter_row) == 0){
+    cli::cli_abort("Input parameter_name did not match any rows in parameter tibble.")
+  }  
+  
+  if(length(parameter_row) > 1){
+    cli::cli_abort("Input parameter_name matched too many rows in parameter tibble: {length(parameter_row)}. Try adding a module_name.")
+  }
+  
   vec <- values + init
   # report the values
   cli::cli_alert_info(
