@@ -97,11 +97,11 @@ run_fims_likelihood <- function(
       dplyr::filter(label == parameter_name) 
   }
 
-  if(length(parameter_row) == 0){
+  if(nrow(parameter_row) == 0){
     cli::cli_abort("Input parameter_name did not match any rows in parameter tibble.")
   }  
   
-  if(length(parameter_row) > 1){
+  if(nrow(parameter_row) > 1){
     cli::cli_abort("Input parameter_name matched too many rows in parameter tibble: {length(parameter_row)}. Try adding a module_name.")
   }
   
