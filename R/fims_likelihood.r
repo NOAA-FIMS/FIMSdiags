@@ -14,7 +14,6 @@
 #' @return A list containing the vector of parameter values and a dataframe with the estimates for each model.
 #' @export
 #' 
-#' @importFrom rlang .data
 #' 
 #' @examples 
 #' \dontrun{
@@ -68,7 +67,7 @@ run_fims_likelihood <- function(
     cli::cli_abort("Input min should be less than max.")
   }
   if (min > 0 | max < 0) {
-    cli::cli_warning("Inputs min and max don't span 0. Are you sure this is right?")
+    cli::cli_alert_warning("Inputs min and max don't span 0. Are you sure this is right?")
   }
 
   if(class(model) != "FIMSFit"){
@@ -78,25 +77,25 @@ run_fims_likelihood <- function(
   values = seq(min, max, length = length)
 
   init <- FIMS::get_estimates(model) |> 
-    dplyr::filter(.data[[label]] == parameter_name) |> 
-    dplyr::pull(.data[[estimated]]) #NOTE: input and estimated value are slightly different (even though its fixed) input = 13.8155, estimated = 13.857
+    dplyr::filter(.data[["label"]] == parameter_name) |> 
+    dplyr::pull(.data[["estimated"]]) #NOTE: input and estimated value are slightly different (even though its fixed) input = 13.8155, estimated = 13.857
 
     if (!is.null(module_name)) {
     module_names <- parameters |> 
       tidyr::unnest(cols = data) |> 
-      dplyr::pull(.data[[module_name]]) |> 
+      dplyr::pull(.data[["module_name"]]) |> 
       unique()
       if(!module_name %in% module_names){
         cli::cli_abort("Input module_name not found in parameters tibble.")
       }
     parameter_row <- parameters |> 
       tidyr::unnest(cols = data) |>
-      dplyr::filter(.data[[module_name]] == module_name & .data[[label]] == parameter_name) 
+      dplyr::filter(.data[["module_name"]] == module_name & .data[["label"]] == parameter_name) 
 
   } else {
     parameter_row <- parameters |>
       tidyr::unnest(cols = data) |> 
-      dplyr::filter(.data[[label]] == parameter_name) 
+      dplyr::filter(.data[["label"]] == parameter_name) 
   }
 
   if(nrow(parameter_row) == 0){
@@ -114,25 +113,25 @@ run_fims_likelihood <- function(
   )
 
   # Set number of cores to use 
-  if(is.null(n_cores)){
-    n_cores <- parallel::detectCores() - 1
+  if (is.null(n_cores)) {
+    n_cores_to_use <- parallel::detectCores() - 1
+  } else {
+    n_cores_to_use <- as.integer(n_cores)
   }
 
-  n_cores <- as.integer(n_cores)
-
-  if(!is.integer(n_cores) & n_cores > 0){
-    cli::cli_abort("n_cores must be a positive integer. Input was {n_cores}")
+  if(!is.integer(n_cores_to_use) & n_cores_to_use > 0){
+    cli::cli_abort("n_cores must be a positive integer. Input was {n_cores_to_use}")
   }
   dplyr::case_when (
-    n_cores == 1 ~ future::plan(future::sequential),
-    n_cores > 1 & Sys.info()['sysname'] == 'Windows' ~ future::plan(future::multisession, workers = n_cores),
-    n_cores > 1 & Sys.info()['sysname'] != 'Windows' ~ future::plan(future::multicore, workers = n_cores)
+    n_cores_to_use == 1 ~ future::plan(future::sequential),
+    n_cores_to_use > 1 & Sys.info()['sysname'] == 'Windows' ~ future::plan(future::multisession, workers = n_cores_to_use),
+    n_cores_to_use > 1 & Sys.info()['sysname'] != 'Windows' ~ future::plan(future::multicore, workers = n_cores_to_use)
   )
 
-  if (n_cores == 1) {
+  if (n_cores_to_use == 1) {
     cli::cli_alert_info("...Running sequentially on a single core")
   } else {
-    cli::cli_alert_info("...Running in parallel on {n_cores} cores")
+    cli::cli_alert_info("...Running in parallel on {n_cores_to_use} cores")
   }
 
   # Ensure cleanup happens 

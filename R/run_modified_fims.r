@@ -10,7 +10,6 @@
 #' @return FIMS model fitted to the new parameter input value
 #' @export
 #' 
-#' @importFrom rlang .data
 #' 
 #' @examples 
 #' \dontrun{
@@ -47,19 +46,21 @@ run_modified_pars_fims <- function(
 
  # if parameters is nested, then unnest
   if ("data" %in% names(parameters)) {
-    parameters <- parameters |> tidyr::unnest(cols = data)
+    parameters_to_use <- parameters |> tidyr::unnest(cols = data)
+  }else{
+    parameters_to_use <- parameters
   }
 
   # find the parameter
   if (!is.null(module_name)) {
-    parameter_row <- parameters |> 
-      dplyr::filter(.data[[module_name]] == module_name & .data[[label]] == parameter_name)
+    parameter_row <- parameters_to_use |> 
+      dplyr::filter(.data[["module_name"]] == module_name & .data[["label"]] == parameter_name)
     if (nrow(parameter_row) == 0) {
       cli::cli_abort("Parameter with module name {module_name} and label {label} not found in parameters object")
     }
   } else {
-    parameter_row <- parameters |> 
-      dplyr::filter(.data[[label]] == parameter_name)
+    parameter_row <- parameters_to_use |> 
+      dplyr::filter(.data[["label"]] == parameter_name)
     if (nrow(parameter_row) == 0) {
       cli::cli_abort("Parameter with label {parameter_name} not found in parameters object")
     }
@@ -69,9 +70,9 @@ run_modified_pars_fims <- function(
   }
 
   # Update value
-  parameter_row[[value]] <- new_value 
-  parameter_row[[estimation_type]] <- "constant"
-  parameters_mod <- parameters |> 
+  parameter_row[["value"]] <- new_value 
+  parameter_row[["estimation_type"]] <- "constant"
+  parameters_mod <- parameters_to_use |> 
     dplyr::rows_update(
       parameter_row,
       by = c("module_name", "label")
@@ -95,7 +96,6 @@ run_modified_pars_fims <- function(
 #' @return FIMS model fitted with years of data removed
 #' @export
 #' 
-#' @importFrom rlang .data
 #' 
 #' @examples 
 #' \dontrun{
@@ -125,17 +125,19 @@ run_modified_data_fims <- function(years_to_remove = 0, data, parameters) {
     # this is to avoid the warning:
     #   no applicable method for 'filter' applied to an object of class "FIMSFrame"
     if ("FIMSFrame" %in% methods::is(data)) {
-        data <- data@data
+        data_to_use <- data@data
+    }else{
+      data_to_use <- data
     }
 
     # Remove years from data
     if (years_to_remove == 0) {
-        data_mod <- data
+        data_mod <- data_to_use
     } else {
-        data_mod <- data |>
+        data_mod <- data_to_use |>
             dplyr::filter(
-                (.data[[type]] %in% c("age-to-length-conversion", "weight-at-age")) |
-                    .data[[timing]] <= max(.data[[timing]]) - years_to_remove 
+                (.data[["type"]] %in% c("age-to-length-conversion", "weight-at-age")) |
+                    .data[["timing"]] <= max(.data[["timing"]]) - years_to_remove 
             )
     }
     # convert to FIMSFrame format

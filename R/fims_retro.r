@@ -37,24 +37,25 @@ run_fims_retrospective <- function(
     n_cores = NULL) {
 
     # Set number of cores to use 
-    if(is.null(n_cores)){
-        n_cores <- parallel::detectCores() - 1
+    if (is.null(n_cores)) {
+        n_cores_to_use <- parallel::detectCores() - 1
+    } else {
+        n_cores_to_use <- as.integer(n_cores)
     }
-    n_cores <- as.integer(n_cores)
 
-    if(!is.integer(n_cores) & n_cores > 0){
-        cli::cli_abort("n_cores must be a positive integer. Input was {n_cores}")
+    if(!is.integer(n_cores_to_use) & n_cores_to_use > 0){
+        cli::cli_abort("n_cores must be a positive integer. Input was {n_cores_to_use}")
     }
     dplyr::case_when (
-        n_cores == 1 ~ future::plan(future::sequential),
-        n_cores > 1 & Sys.info()['sysname'] == 'Windows' ~ future::plan(future::multisession, workers = n_cores),
-        n_cores > 1 & Sys.info()['sysname'] != 'Windows' ~ future::plan(future::multicore, workers = n_cores)
+        n_cores_to_use == 1 ~ future::plan(future::sequential),
+        n_cores_to_use > 1 & Sys.info()['sysname'] == 'Windows' ~ future::plan(future::multisession, workers = n_cores_to_use),
+        n_cores_to_use > 1 & Sys.info()['sysname'] != 'Windows' ~ future::plan(future::multicore, workers = n_cores_to_use)
     )
 
-    if (n_cores == 1) {
+    if (n_cores_to_use == 1) {
         cli::cli_alert_info("...Running sequentially on a single core")
     } else {
-        cli::cli_alert_info("...Running in parallel on {n_cores} cores")
+        cli::cli_alert_info("...Running in parallel on {n_cores_to_use} cores")
     }
     on.exit(future::plan(future::sequential), add = TRUE)
 
