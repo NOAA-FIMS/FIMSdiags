@@ -16,7 +16,7 @@ run_modified_pars_fims(
 \arguments{
 \item{new_value}{The new value to be changed in the FIMS model.}
 
-\item{parameter_name}{The name of the parameter value (as listed in parameters[\link{label}]) to be modified}
+\item{parameter_name}{The name of the parameter value (as listed in parameters[\link{"label"}]) to be modified}
 
 \item{module_name}{The name of module associated with the parameter to be changed. Default is NULL.}
 
