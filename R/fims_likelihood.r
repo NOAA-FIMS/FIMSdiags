@@ -158,10 +158,6 @@ run_fims_likelihood <- function(
     .options = furrr::furrr_options(seed = TRUE, globals = TRUE)
   )
 
-  # pull the estimates tibble out of each of the FIMSFit S4 objects into a list
-  # moved to inside the parallel function so R session doesn't crash
-  #estimates_list <- purrr::map(estimates, get_estimates) 
-
   # adding the fixed parameter value to the estimates tibble for each of the models
   for (i in seq_along(estimates_list)) {
     # create a new column name based on the profile parameter
