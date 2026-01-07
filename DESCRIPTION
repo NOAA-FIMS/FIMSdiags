@@ -16,7 +16,6 @@ Imports:
     future,
     ggplot2,
     parallel,
-    purrr,
     stockplotr,
     tidyr,
     viridisLite
