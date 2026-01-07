@@ -58,7 +58,7 @@ jobs:
 
       - name: Restore renv snapshot
         run: |
-          if (!require("renv")) install.packages("renv")
+          if (!require("renv")) install.packages("renv", repos = "https://cloud.r-project.org/")
           renv::restore()
         shell: Rscript {0}
 
