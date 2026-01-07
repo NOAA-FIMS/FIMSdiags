@@ -18,7 +18,8 @@ Imports:
     parallel,
     stockplotr,
     tidyr,
-    viridisLite
+    viridisLite,
+    rlang
 Suggests: 
     knitr,
     rmarkdown,
