@@ -19,7 +19,8 @@ Imports:
     stockplotr,
     tidyr,
     viridisLite,
-    rlang
+    rlang,
+    methods
 Suggests: 
     knitr,
     rmarkdown,

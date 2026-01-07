@@ -2,7 +2,7 @@
 #' This function is called by run_fims_likelihood()
 #'
 #' @param new_value The new value to be changed in the FIMS model.
-#' @param parameter_name The name of the parameter value (as listed in parameters[[label]]) to be modified
+#' @param parameter_name The name of the parameter value (as listed in parameters[["label"]]) to be modified
 #' @param module_name The name of module associated with the parameter to be changed. Default is NULL.
 #' @param parameters The tibble of input parameters for a FIMS model
 #' @param data A dataframe of input data for FIMS model
@@ -35,14 +35,14 @@ run_modified_pars_fims <- function(
   data) {
 
   # Need to load packages for each worker for furrr functions
-  suppressWarnings({
-    suppressPackageStartupMessages({
-      require(FIMS, quietly = TRUE)
-      require(dplyr, quietly = TRUE)
-      require(tidyr, quietly = TRUE)
-      require(cli, quietly = TRUE)
-    })
-  })
+  # suppressWarnings({
+  #   suppressPackageStartupMessages({
+  #     require(FIMS, quietly = TRUE)
+  #     require(dplyr, quietly = TRUE)
+  #     require(tidyr, quietly = TRUE)
+  #     require(cli, quietly = TRUE)
+  #   })
+  # })
 
  # if parameters is nested, then unnest
   if ("data" %in% names(parameters)) {
@@ -56,7 +56,7 @@ run_modified_pars_fims <- function(
     parameter_row <- parameters_to_use |> 
       dplyr::filter(.data[["module_name"]] == module_name & .data[["label"]] == parameter_name)
     if (nrow(parameter_row) == 0) {
-      cli::cli_abort("Parameter with module name {module_name} and label {label} not found in parameters object")
+      cli::cli_abort("Parameter with module name {module_name} and label {parameter_name} not found in parameters object")
     }
   } else {
     parameter_row <- parameters_to_use |> 
@@ -113,14 +113,14 @@ run_modified_pars_fims <- function(
 
 run_modified_data_fims <- function(years_to_remove = 0, data, parameters) {
     # Need to load packages for each worker for furrr functions
-    suppressWarnings({
-      suppressPackageStartupMessages({
-        require(FIMS, quietly = TRUE)
-        require(dplyr, quietly = TRUE)
-        require(lubridate, quietly = TRUE)
-        require(cli, quietly = TRUE)
-      })
-    })
+    # suppressWarnings({
+    #   suppressPackageStartupMessages({
+    #     require(FIMS, quietly = TRUE)
+    #     require(dplyr, quietly = TRUE)
+    #     require(lubridate, quietly = TRUE)
+    #     require(cli, quietly = TRUE)
+    #   })
+    # })
     # check if the input is a FIMSframe object and if so, extract the data
     # this is to avoid the warning:
     #   no applicable method for 'filter' applied to an object of class "FIMSFrame"
