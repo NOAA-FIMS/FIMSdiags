@@ -14,6 +14,8 @@
 #' @return A list containing the vector of parameter values and a dataframe with the estimates for each model.
 #' @export
 #' 
+#' @importFrom rlang .data
+#' 
 #' @examples 
 #' \dontrun{
 #'  library(FIMS)
@@ -75,26 +77,26 @@ run_fims_likelihood <- function(
   # calculate vector
   values = seq(min, max, length = length)
 
-  init <- get_estimates(model) |> 
-    dplyr::filter(label == parameter_name) |> 
-    dplyr::pull(estimated) #NOTE: input and estimated value are slightly different (even though its fixed) input = 13.8155, estimated = 13.857
+  init <- FIMS::get_estimates(model) |> 
+    dplyr::filter(.data[[label]] == parameter_name) |> 
+    dplyr::pull(.data[[estimated]]) #NOTE: input and estimated value are slightly different (even though its fixed) input = 13.8155, estimated = 13.857
 
     if (!is.null(module_name)) {
     module_names <- parameters |> 
       tidyr::unnest(cols = data) |> 
-      dplyr::pull(module_name) |> 
+      dplyr::pull(.data[[module_name]]) |> 
       unique()
       if(!module_name %in% module_names){
         cli::cli_abort("Input module_name not found in parameters tibble.")
       }
     parameter_row <- parameters |> 
       tidyr::unnest(cols = data) |>
-      dplyr::filter(.data$module_name == module_name & label == parameter_name) 
+      dplyr::filter(.data[[module_name]] == module_name & .data[[label]] == parameter_name) 
 
   } else {
     parameter_row <- parameters |>
       tidyr::unnest(cols = data) |> 
-      dplyr::filter(label == parameter_name) 
+      dplyr::filter(.data[[label]] == parameter_name) 
   }
 
   if(nrow(parameter_row) == 0){
@@ -149,7 +151,7 @@ run_fims_likelihood <- function(
         data = data
       )
       # Extract estimates immediately while still in worker
-      get_estimates(fit)
+      FIMS::get_estimates(fit)
     },
     parameter_name = parameter_name, 
     module_name = module_name,

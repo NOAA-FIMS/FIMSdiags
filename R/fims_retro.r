@@ -9,6 +9,8 @@
 #' @return A list containing the vector of parameter values and a dataframe of estimates from each retrospective peel
 #' @export
 #' 
+#' @importFrom rlang .data
+#' 
 #' @examples 
 #' \dontrun{
 #'  library(FIMS)
@@ -65,7 +67,7 @@ run_fims_retrospective <- function(
                 data = data, 
                 parameters = parameters
             )
-            get_estimates(fit)
+            FIMS::get_estimates(fit)
         },
         .options = furrr::furrr_options(seed = TRUE, globals = TRUE)
     )
