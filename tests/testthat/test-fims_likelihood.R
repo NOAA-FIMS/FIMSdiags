@@ -105,7 +105,7 @@ test_that("run_fims_likelihood() handles edge cases correctly", {
 })
 
 cli::test_that_cli("run_fims_likelihood() shows warning when min and max don't span 0", {
-  #' @description Test that run_fims_likelihood shows warning when min and max don't span 0.
+  #' @description Test that run_fims_likelihood() shows warning when min and max don't span 0.
   expect_snapshot(
     run_fims_likelihood(
       model = base_model,
@@ -120,7 +120,7 @@ cli::test_that_cli("run_fims_likelihood() shows warning when min and max don't s
 })
 
 cli::test_that_cli("run_fims_likelihood() shows warning for large length", {
-  #' @description Test that run_fims_likelihood shows warning when length > 50.
+  #' @description Test that run_fims_likelihood() shows warning when length > 50.
   expect_snapshot(
     run_fims_likelihood(
       model = base_model,
