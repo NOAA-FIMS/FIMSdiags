@@ -2,7 +2,8 @@
 #' This function is called by run_fims_likelihood()
 #'
 #' @param new_value The new value to be changed in the FIMS model.
-#' @param parameter_name The name of the parameter value (as listed in parameters[["label"]]) to be modified
+#' @param parameter_name A string specifying the parameter name to modify. 
+#' This should match a value in the `label` column of the parameters tibble.
 #' @param module_name The name of module associated with the parameter to be changed. Default is NULL.
 #' @param parameters The tibble of input parameters for a FIMS model
 #' @param data A dataframe of input data for FIMS model
