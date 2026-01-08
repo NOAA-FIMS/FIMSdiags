@@ -95,8 +95,8 @@ test_that("run_fims_likelihood() handles edge cases correctly", {
       parameters = parameters,
       data = data1,
       n_cores = 1,
-      min = 0,
-      max = 0.1,
+      min = 0.1,
+      max = 0.2,
       length = 2
     ),
     regexp = "don't span 0"
