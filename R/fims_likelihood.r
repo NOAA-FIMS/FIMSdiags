@@ -66,15 +66,16 @@ run_fims_likelihood <- function(
   if (min >= max) {
     cli::cli_abort("Input min should be less than max.")
   }
-  if (min > 0 | max < 0) {
-    cli::cli_alert_warning("Inputs min and max don't span 0. Are you sure this is right?")
-  }
 
   if(class(model) != "FIMSFit"){
     cli::cli_abort("Input model needs to be a FIMSFit object.")
   }
   # calculate vector
   values = seq(min, max, length = length)
+  
+  if (!0 %in% values) {
+    cli::cli_alert_warning("Inputs min and max don't span 0. Are you sure this is right?")
+  }
 
   init <- FIMS::get_estimates(model) |> 
     dplyr::filter(.data[["label"]] == parameter_name) |> 
@@ -116,11 +117,11 @@ run_fims_likelihood <- function(
   if (is.null(n_cores)) {
     n_cores_to_use <- parallel::detectCores() - 1
   } else {
+    # Validate n_cores before conversion
+    if (!is.numeric(n_cores) || n_cores %% 1 != 0 || n_cores <= 0) {
+      cli::cli_abort("n_cores must be a positive integer. Input was {n_cores}")
+    }
     n_cores_to_use <- as.integer(n_cores)
-  }
-
-  if(!is.integer(n_cores_to_use) & n_cores_to_use > 0){
-    cli::cli_abort("n_cores must be a positive integer. Input was {n_cores_to_use}")
   }
   dplyr::case_when (
     n_cores_to_use == 1 ~ future::plan(future::sequential),
