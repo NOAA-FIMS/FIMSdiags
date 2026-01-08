@@ -50,7 +50,7 @@ run_fims_retrospective <- function(
         n_cores_to_use <- parallel::detectCores() - 1
     } else {
         # Validate n_cores before conversion
-        if (!is.numeric(n_cores) || n_cores != as.integer(n_cores) || n_cores <= 0) {
+        if (!is.numeric(n_cores) || n_cores != round(n_cores) || n_cores <= 0) {
             cli::cli_abort("n_cores must be a positive integer. Input was {n_cores}")
         }
         n_cores_to_use <- as.integer(n_cores)
