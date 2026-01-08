@@ -36,6 +36,15 @@ run_fims_retrospective <- function(
     parameters, 
     n_cores = NULL) {
 
+    # Validate years_to_remove
+    if (length(years_to_remove) == 0) {
+        cli::cli_abort("years_to_remove must have at least one value")
+    }
+    
+    if (any(years_to_remove < 0)) {
+        cli::cli_abort("years_to_remove must contain non-negative values")
+    }
+
     # Set number of cores to use 
     if (is.null(n_cores)) {
         n_cores_to_use <- parallel::detectCores() - 1
@@ -43,7 +52,7 @@ run_fims_retrospective <- function(
         n_cores_to_use <- as.integer(n_cores)
     }
 
-    if(!is.integer(n_cores_to_use) & n_cores_to_use > 0){
+    if(!is.integer(n_cores_to_use) | n_cores_to_use <= 0){
         cli::cli_abort("n_cores must be a positive integer. Input was {n_cores_to_use}")
     }
     dplyr::case_when (

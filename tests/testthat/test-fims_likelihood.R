@@ -72,20 +72,202 @@ test_that("fims_likelihood() works with correct inputs", {
 })
 
 ## Edge handling ----
-# Please remove/comment out the test template below if no edge cases are being tested.
-# test_that("fims_likelihood() returns correct outputs for edge cases", {
-#   #' @description Test that fims_likelihood(x) returns an error.
-#   expect_error(
-#     object = fims_likelihood(x)
-#   )
-# })
+test_that("run_fims_likelihood() handles edge cases correctly", {
+  #' @description Test that run_fims_likelihood works with minimum valid length = 1.
+  like_fit_min <- run_fims_likelihood(
+    model = base_model,
+    parameters = parameters,
+    data = data1,
+    n_cores = 1,
+    min = -1,
+    max = 1,
+    length = 1
+  )
+  expect_equal(
+    object = length(like_fit_min[["vec"]]),
+    expected = 1
+  )
+  
+  #' @description Test that run_fims_likelihood works with length at boundary (50).
+  expect_warning(
+    like_fit_boundary <- run_fims_likelihood(
+      model = base_model,
+      parameters = parameters,
+      data = data1,
+      n_cores = 1,
+      min = -0.1,
+      max = 0.1,
+      length = 51
+    ),
+    regexp = "are you sure you want it so large"
+  )
+  
+  #' @description Test that run_fims_likelihood works when min and max both equal 0.
+  expect_warning(
+    like_fit_zero <- run_fims_likelihood(
+      model = base_model,
+      parameters = parameters,
+      data = data1,
+      n_cores = 1,
+      min = 0,
+      max = 0.1,
+      length = 2
+    ),
+    regexp = "don't span 0"
+  )
+  
+  #' @description Test that run_fims_likelihood works with n_cores = 1 (sequential).
+  like_fit_seq <- run_fims_likelihood(
+    model = base_model,
+    parameters = parameters,
+    data = data1,
+    n_cores = 1,
+    min = -0.5,
+    max = 0.5,
+    length = 2
+  )
+  expect_equal(
+    object = length(like_fit_seq[["vec"]]),
+    expected = 2
+  )
+})
 
 ## Error handling ----
-# Please remove/comment out the test template below if there are no built-in errors/warnings.
-# test_that("fims_likelihood() returns correct error messages", {
-#   #' @description Test that fims_likelihood(x) returns expected error.
-#   expect_error(
-#     object = fims_likelihood(x),
-#     regexp = "Insert text here that should be in the error message."
-#   )
-# })
+test_that("run_fims_likelihood() returns correct error messages", {
+  #' @description Test that run_fims_likelihood errors with invalid length (negative).
+  expect_error(
+    object = run_fims_likelihood(
+      model = base_model,
+      parameters = parameters,
+      data = data1,
+      n_cores = 1,
+      length = -1
+    ),
+    regexp = "should be a positive integer"
+  )
+  
+  #' @description Test that run_fims_likelihood errors with invalid length (zero).
+  expect_error(
+    object = run_fims_likelihood(
+      model = base_model,
+      parameters = parameters,
+      data = data1,
+      n_cores = 1,
+      length = 0
+    ),
+    regexp = "should be a positive integer"
+  )
+  
+  #' @description Test that run_fims_likelihood errors with invalid length (non-integer).
+  expect_error(
+    object = run_fims_likelihood(
+      model = base_model,
+      parameters = parameters,
+      data = data1,
+      n_cores = 1,
+      length = 3.5
+    ),
+    regexp = "should be a positive integer"
+  )
+  
+  #' @description Test that run_fims_likelihood errors when min >= max.
+  expect_error(
+    object = run_fims_likelihood(
+      model = base_model,
+      parameters = parameters,
+      data = data1,
+      n_cores = 1,
+      min = 1,
+      max = 0
+    ),
+    regexp = "min should be less than max"
+  )
+  
+  #' @description Test that run_fims_likelihood errors when min == max.
+  expect_error(
+    object = run_fims_likelihood(
+      model = base_model,
+      parameters = parameters,
+      data = data1,
+      n_cores = 1,
+      min = 1,
+      max = 1
+    ),
+    regexp = "min should be less than max"
+  )
+  
+  #' @description Test that run_fims_likelihood errors with invalid n_cores (non-integer).
+  expect_error(
+    object = run_fims_likelihood(
+      model = base_model,
+      parameters = parameters,
+      data = data1,
+      n_cores = 2.5,
+      length = 3
+    ),
+    regexp = "n_cores must be a positive integer"
+  )
+  
+  #' @description Test that run_fims_likelihood errors with invalid n_cores (zero).
+  expect_error(
+    object = run_fims_likelihood(
+      model = base_model,
+      parameters = parameters,
+      data = data1,
+      n_cores = 0,
+      length = 3
+    ),
+    regexp = "n_cores must be a positive integer"
+  )
+  
+  #' @description Test that run_fims_likelihood errors with invalid n_cores (negative).
+  expect_error(
+    object = run_fims_likelihood(
+      model = base_model,
+      parameters = parameters,
+      data = data1,
+      n_cores = -1,
+      length = 3
+    ),
+    regexp = "n_cores must be a positive integer"
+  )
+  
+  #' @description Test that run_fims_likelihood errors with invalid model class.
+  expect_error(
+    object = run_fims_likelihood(
+      model = list(fake = "model"),
+      parameters = parameters,
+      data = data1,
+      n_cores = 1,
+      length = 3
+    ),
+    regexp = "needs to be a FIMSFit object"
+  )
+  
+  #' @description Test that run_fims_likelihood errors with invalid module_name.
+  expect_error(
+    object = run_fims_likelihood(
+      model = base_model,
+      parameters = parameters,
+      data = data1,
+      module_name = "nonexistent_module",
+      parameter_name = "log_rzero",
+      n_cores = 1,
+      length = 3
+    ),
+    regexp = "module_name not found"
+  )
+  
+  #' @description Test that run_fims_likelihood errors with invalid parameter_name.
+  expect_error(
+    object = run_fims_likelihood(
+      model = base_model,
+      parameters = parameters,
+      data = data1,
+      parameter_name = "nonexistent_parameter",
+      n_cores = 1,
+      length = 3
+    ),
+    regexp = "did not match any rows"
+  )
+})
