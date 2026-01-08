@@ -60,7 +60,7 @@ run_fims_likelihood <- function(
   }
   
   if(length > 50){
-    warning(paste0("Input length is ", length, ", are you sure you want it so large?"))
+    warning(sprintf("Input length is %d, are you sure you want it so large?", length))
   }
   
   if (min >= max) {
