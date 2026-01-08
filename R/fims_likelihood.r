@@ -116,11 +116,11 @@ run_fims_likelihood <- function(
   if (is.null(n_cores)) {
     n_cores_to_use <- parallel::detectCores() - 1
   } else {
+    # Validate n_cores before conversion
+    if (!is.numeric(n_cores) || n_cores != as.integer(n_cores) || n_cores <= 0) {
+      cli::cli_abort("n_cores must be a positive integer. Input was {n_cores}")
+    }
     n_cores_to_use <- as.integer(n_cores)
-  }
-
-  if(!is.integer(n_cores_to_use) | n_cores_to_use <= 0){
-    cli::cli_abort("n_cores must be a positive integer. Input was {n_cores_to_use}")
   }
   dplyr::case_when (
     n_cores_to_use == 1 ~ future::plan(future::sequential),
