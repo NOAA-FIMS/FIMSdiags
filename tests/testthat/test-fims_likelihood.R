@@ -87,20 +87,6 @@ test_that("run_fims_likelihood() handles edge cases correctly", {
     object = length(like_fit_min[["vec"]]),
     expected = 1
   )
-    
-  #' @description Test that run_fims_likelihood works when min and max don't span 0 (warning).
-  expect_warning(
-    run_fims_likelihood(
-      model = base_model,
-      parameters = parameters,
-      data = data1,
-      n_cores = 1,
-      min = 0.1,
-      max = 0.2,
-      length = 2
-    ),
-    regexp = "don't span 0"
-  )
   
   #' @description Test that run_fims_likelihood works with n_cores = 1 (sequential).
   like_fit_seq <- run_fims_likelihood(
@@ -115,6 +101,36 @@ test_that("run_fims_likelihood() handles edge cases correctly", {
   expect_equal(
     object = length(like_fit_seq[["vec"]]),
     expected = 2
+  )
+})
+
+cli::test_that_cli("run_fims_likelihood() shows warning when min and max don't span 0", {
+  #' @description Test that run_fims_likelihood shows warning when min and max don't span 0.
+  expect_snapshot(
+    run_fims_likelihood(
+      model = base_model,
+      parameters = parameters,
+      data = data1,
+      n_cores = 1,
+      min = 0.1,
+      max = 0.2,
+      length = 2
+    )
+  )
+})
+
+cli::test_that_cli("run_fims_likelihood() shows warning for large length", {
+  #' @description Test that run_fims_likelihood shows warning when length > 50.
+  expect_snapshot(
+    run_fims_likelihood(
+      model = base_model,
+      parameters = parameters,
+      data = data1,
+      n_cores = 1,
+      min = -0.1,
+      max = 0.1,
+      length = 51
+    )
   )
 })
 
