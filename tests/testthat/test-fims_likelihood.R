@@ -90,7 +90,7 @@ test_that("run_fims_likelihood() handles edge cases correctly", {
   
   #' @description Test that run_fims_likelihood works with length = 51 (warning threshold).
   expect_warning(
-    like_fit_boundary <- run_fims_likelihood(
+    run_fims_likelihood(
       model = base_model,
       parameters = parameters,
       data = data1,
@@ -104,7 +104,7 @@ test_that("run_fims_likelihood() handles edge cases correctly", {
   
   #' @description Test that run_fims_likelihood works when min and max don't span 0 (warning).
   expect_warning(
-    like_fit_zero <- run_fims_likelihood(
+    run_fims_likelihood(
       model = base_model,
       parameters = parameters,
       data = data1,
