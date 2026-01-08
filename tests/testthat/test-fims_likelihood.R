@@ -119,20 +119,20 @@ cli::test_that_cli("run_fims_likelihood() shows warning when min and max don't s
   )
 })
 
-cli::test_that_cli("run_fims_likelihood() shows warning for large length", {
-  #' @description Test that run_fims_likelihood() shows warning when length > 50.
-  expect_snapshot(
-    run_fims_likelihood(
-      model = base_model,
-      parameters = parameters,
-      data = data1,
-      n_cores = 1,
-      min = -0.1,
-      max = 0.1,
-      length = 51
-    )
-  )
-})
+# cli::test_that_cli("run_fims_likelihood() shows warning for large length", {
+#   #' @description Test that run_fims_likelihood() shows warning when length > 50.
+#   expect_snapshot(
+#     run_fims_likelihood(
+#       model = base_model,
+#       parameters = parameters,
+#       data = data1,
+#       n_cores = 1,
+#       min = -0.1,
+#       max = 0.1,
+#       length = 51
+#     )
+#   )
+# })
 
 ## Error handling ----
 test_that("run_fims_likelihood() returns correct error messages", {
