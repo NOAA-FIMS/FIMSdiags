@@ -87,6 +87,20 @@ test_that("run_fims_likelihood() handles edge cases correctly", {
     object = length(like_fit_min[["vec"]]),
     expected = 1
   )
+  
+  #' @description Test that run_fims_likelihood works with length = 51 (warning threshold).
+  expect_warning(
+    run_fims_likelihood(
+      model = base_model,
+      parameters = parameters,
+      data = data1,
+      n_cores = 1,
+      min = -0.1,
+      max = 0.1,
+      length = 51
+    ),
+    regexp = "are you sure you want it so large"
+  )
     
   #' @description Test that run_fims_likelihood works when min and max don't span 0 (warning).
   expect_warning(
