@@ -60,7 +60,7 @@ run_fims_likelihood <- function(
   }
   
   if(length > 50){
-    cli::cli_alert_warning("Input length is {length}, are you sure you want it so large?")
+    cli::cli_warn("Input length is {length}, are you sure you want it so large?")
   }
   
   if (min >= max) {
@@ -74,7 +74,7 @@ run_fims_likelihood <- function(
   values = seq(min, max, length = length)
   
   if (!0 %in% values) {
-    cli::cli_alert_warning("Inputs min and max don't span 0. Are you sure this is right?")
+    cli::cli_warn("Inputs min and max don't span 0. Are you sure this is right?")
   }
 
   init <- FIMS::get_estimates(model) |> 

@@ -106,7 +106,7 @@ test_that("run_fims_likelihood() handles edge cases correctly", {
 
 cli::test_that_cli("run_fims_likelihood() shows warning when min and max don't span 0", {
   #' @description Test that run_fims_likelihood() shows warning when min and max don't span 0.
-  expect_snapshot(
+  expect_warning(
     run_fims_likelihood(
       model = base_model,
       parameters = parameters,
@@ -115,7 +115,8 @@ cli::test_that_cli("run_fims_likelihood() shows warning when min and max don't s
       min = 0.1,
       max = 0.2,
       length = 2
-    )
+    ),
+    regexp = "Inputs min and max don't span 0"
   )
 })
 
