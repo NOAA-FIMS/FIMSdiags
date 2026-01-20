@@ -21,9 +21,6 @@
 #' (data frame with retrospective results)
 #' @param quantity Character string specifying which quantity to calculate 
 #' Mohn's rho for (e.g., "spawning_biomass", "recruitment")
-#' @param ref_year Optional numeric value specifying the reference year to use 
-#' for calculation. If NULL (default), uses the approach where each peel is 
-#' compared to the base model at the peel's terminal year.
 #'
 #' @return A numeric value representing Mohn's rho. Values close to zero indicate
 #' minimal retrospective bias. Positive values suggest the model retrospectively 
@@ -71,7 +68,7 @@
 #' # Calculate Mohn's rho for recruitment
 #' rho_rec <- calculate_mohns_rho(retro_fit, quantity = "recruitment")
 #' }
-calculate_mohns_rho <- function(retro_fit, quantity, ref_year = NULL) {
+calculate_mohns_rho <- function(retro_fit, quantity) {
   
   # Input validation
   if (!is.list(retro_fit)) {
@@ -86,13 +83,9 @@ calculate_mohns_rho <- function(retro_fit, quantity, ref_year = NULL) {
     cli::cli_abort("{.arg quantity} must be a single character string")
   }
   
-  if (!is.null(ref_year) && (!is.numeric(ref_year) || length(ref_year) != 1)) {
-    cli::cli_abort("{.arg ref_year} must be a single numeric value or NULL")
-  }
-  
-  # Check that the first model has 0 years peeled
+  # Check that the first model has 0 years peeled (i.e., it's the reference model)
   if (0 != retro_fit[["years_to_remove"]][[1]]) {
-    cli::cli_abort("estimates tibble must contain reference year run (retro_year = 0)")
+    cli::cli_abort("{.arg retro_fit} must start with reference model (years_to_remove[1] = 0)")
   }
   
   # Filter estimates for the specified quantity

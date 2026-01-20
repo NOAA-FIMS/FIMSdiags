@@ -10,7 +10,7 @@
 # calculate_mohns_rho ----
 ## Setup ----
 # Load or prepare any necessary data for testing
-# clear memory
+# clear memory (FIMS function to clear TMB memory)
 clear()
 ## Load sample data
 data("data1")
@@ -138,16 +138,6 @@ test_that("calculate_mohns_rho() returns correct error messages", {
       quantity = c("spawning_biomass", "recruitment")
     ),
     regexp = "must be a single character string"
-  )
-  
-  #' @description Test that calculate_mohns_rho() errors with invalid ref_year (not numeric).
-  expect_error(
-    object = calculate_mohns_rho(
-      retro_fit = retro_fit,
-      quantity = "spawning_biomass",
-      ref_year = "not_numeric"
-    ),
-    regexp = "must be a single numeric value or NULL"
   )
   
   #' @description Test that calculate_mohns_rho() errors when first model is not reference (retro_year != 0).

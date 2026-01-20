@@ -4,7 +4,7 @@
 \alias{calculate_mohns_rho}
 \title{Calculate Mohn's rho for retrospective analysis}
 \usage{
-calculate_mohns_rho(retro_fit, quantity, ref_year = NULL)
+calculate_mohns_rho(retro_fit, quantity)
 }
 \arguments{
 \item{retro_fit}{List returned by the \code{\link[=run_fims_retrospective]{run_fims_retrospective()}} function
@@ -13,10 +13,6 @@ containing \code{years_to_remove} (vector of years peeled) and \code{estimates}
 
 \item{quantity}{Character string specifying which quantity to calculate
 Mohn's rho for (e.g., "spawning_biomass", "recruitment")}
-
-\item{ref_year}{Optional numeric value specifying the reference year to use
-for calculation. If NULL (default), uses the approach where each peel is
-compared to the base model at the peel's terminal year.}
 }
 \value{
 A numeric value representing Mohn's rho. Values close to zero indicate
