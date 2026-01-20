@@ -1,46 +1,124 @@
-#' Run likelihood profile for a FIMS model
+#' Run Likelihood Profile for a FIMS Model
 #'
-#' This function runs a likelihood profile for a FIMS model by fixing a specified parameter at a range of values spanning the initial value.
+#' @title Run Likelihood Profile
 #'
-#' @param model Output from [fit_fims()], currently only used to get the estimated value for log_rzero.
-#' @param parameters A FIMS parameters object containing the model parameters.
-#' @param data A dataframe or tibble containing the model data, or a FIMSFrame object.
-#' @param module_name A string specifying the module the parameter being profiled over is in. Default is NULL.
-#' @param parameter_name A string specifying the parameter to profile over, e.g., "log_rzero".
-#' @param n_cores The number of cores to use to run likelihood profile in parallel. Default is `parallel::detectCores() - 1`.
-#' @param min The minimum value for the parameter profile relative to the initial value.
-#' @param max The maximum value for the parameter profile relative to the initial value.
-#' @param length The number of values to generate between `min` and `max`. An odd number is recommended to include the initial value.
-#' @return A list containing the vector of parameter values and a dataframe with the estimates for each model.
+#' @description
+#' Conducts likelihood profile analysis for a FIMS model by fixing a specified
+#' parameter at a range of values and re-optimizing all other parameters. This
+#' diagnostic tool helps assess parameter uncertainty, identifiability, and
+#' potential local minima in the likelihood surface.
+#'
+#' @details
+#' Likelihood profiling involves systematically varying a parameter of interest
+#' across a range of values while optimizing all other parameters. At each fixed
+#' value, the negative log-likelihood is recorded, creating a profile of the
+#' likelihood surface. This reveals whether the parameter is well-estimated
+#' (sharp, parabolic profile) or poorly identified (flat profile), and can
+#' identify multiple modes or asymmetric confidence regions.
+#'
+#' The function profiles over values specified relative to the estimated value
+#' from the base model. For example, with `min = -2` and `max = 2`, the profile
+#' spans from 2 units below to 2 units above the estimated value. The profiled
+#' values are evenly spaced on the parameter scale (not log scale).
+#'
+#' Models are run in parallel for computational efficiency. The function
+#' automatically handles parameter identification using module names when needed
+#' to distinguish between multiple instances of the same parameter type.
+#'
+#' @param model A FIMSFit object returned by [FIMS::fit_fims()]. Used to extract
+#'   the estimated value of the parameter being profiled
+#' @param parameters A FIMS parameters object created by
+#'   [FIMS::create_default_parameters()], containing the model configuration
+#'   and initial parameter values
+#' @param data A data frame, tibble, or FIMSFrame object containing the model
+#'   data. This should include all data types required by FIMS
+#' @param module_name A character string specifying the module containing the
+#'   parameter to profile. Default is `NULL`. Required when the parameter name
+#'   exists in multiple modules (e.g., multiple fleets). Examples include
+#'   `"fleet1"`, `"survey1"`, or `"recruitment"`
+#' @param parameter_name A character string specifying the parameter to profile.
+#'   Default is `"log_rzero"`. Must match a parameter name in the FIMS model.
+#'   Common options include `"log_rzero"`, `"log_sigma_recruit"`, `"logit_steep"`,
+#'   or selectivity parameters
+#' @param n_cores An integer specifying the number of CPU cores to use for
+#'   parallel processing. If `NULL` (default), uses `parallel::detectCores() - 1`.
+#'   Set to 1 for sequential processing. Must be a positive integer
+#' @param min A numeric value specifying the minimum offset from the estimated
+#'   parameter value. Default is `-2`. The profile range starts at
+#'   `estimated_value + min`
+#' @param max A numeric value specifying the maximum offset from the estimated
+#'   parameter value. Default is `2`. The profile range ends at
+#'   `estimated_value + max`. Must be greater than `min`
+#' @param length An integer specifying the number of points in the likelihood
+#'   profile. Default is `5`. Use an odd number to include the estimated value.
+#'   Must be a positive integer. Values above 50 will generate a warning
+#'
+#' @return
+#' A list with two named elements:
+#' * `vec` - Numeric vector of parameter values used in the profile
+#' * `estimates` - Data frame containing model estimates for each profiled value,
+#'   with the following key columns:
+#'   * `label` - Type of estimate (e.g., "spawning_biomass", "recruitment")
+#'   * `year_i` - Year index for the estimate
+#'   * `age_i` - Age index (if applicable)
+#'   * `estimated` - Point estimate value
+#'   * `uncertainty` - Standard error of the estimate
+#'   * `lpdf` - Log probability density (negative log-likelihood component)
+#'   * `value_{parameter_name}` - The fixed parameter value for this profile point
+#'
+#' @references
+#' Venzon, D.J. and Moolgavkar, S.H. 1988. A method for computing
+#' profile-likelihood-based confidence intervals. Applied Statistics 37: 87-94.
+#'
+#' Maunder, M.N. and Punt, A.E. 2013. A review of integrated analysis in
+#' fisheries stock assessment. Fisheries Research 142: 61-74.
+#'
+#' @seealso
+#' * [plot_likelihood()] for visualizing likelihood profiles
+#' * [FIMS::fit_fims()] for fitting FIMS models
+#' * [FIMS::create_default_parameters()] for creating parameter objects
+#'
+#' @family diagnostic_functions
+#'
 #' @export
-#' 
-#' 
-#' @examples 
-#' \dontrun{
-#'  library(FIMS)
-#' # Use built-in dataset from FIMS
-#'  data("data1")
-#'  data_4_model <- FIMSFrame(data1)
-#' # Create a parameters object
-#'  parameters <- data_4_model |>
-#'    create_default_configurations() |>
-#'    create_default_parameters(data = data_4_model)
-#' # Run the  model with optimization
-#'  base_model <- parameters |>
-#'    initialize_fims(data = data_4_model) |>
-#'    fit_fims(optimize = TRUE)
-#'  like_fit <- run_fims_likelihood(
-#'    model = base_model,
-#'    parameters = parameters,
-#'    parameter_name = "log_rzero",
-#'    data = data1,
-#'    n_cores = 3,
-#'    min = -1,
-#'    max = 1,
-#'    length = 3
-#'   )
 #'
+#' @examples
+#' \dontrun{
+#' library(FIMS)
+#'
+#' # Use built-in dataset from FIMS
+#' data("data1")
+#' data_4_model <- FIMSFrame(data1)
+#'
+#' # Create a parameters object
+#' parameters <- data_4_model |>
+#'   create_default_configurations() |>
+#'   create_default_parameters(data = data_4_model)
+#'
+#' # Run the base model with optimization
+#' base_model <- parameters |>
+#'   initialize_fims(data = data_4_model) |>
+#'   fit_fims(optimize = TRUE)
+#'
+#' # Run likelihood profile for log_rzero
+#' like_fit <- run_fims_likelihood(
+#'   model = base_model,
+#'   parameters = parameters,
+#'   data = data1,
+#'   parameter_name = "log_rzero",
+#'   n_cores = 3,
+#'   min = -1,
+#'   max = 1,
+#'   length = 21
+#' )
+#'
+#' # View the profiled parameter values
+#' like_fit$vec
+#'
+#' # View structure of estimates
+#' head(like_fit$estimates)
 #' }
+#'
 
 run_fims_likelihood <- function(
   model,
