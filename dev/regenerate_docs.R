@@ -5,7 +5,11 @@
 
 # Check if we're in the right directory
 if (!file.exists("DESCRIPTION")) {
-  stop("Please run this script from the package root directory")
+  # Load cli package for consistent error handling
+  if (!requireNamespace("cli", quietly = TRUE)) {
+    stop("Please run this script from the package root directory")
+  }
+  cli::cli_abort("Please run this script from the package root directory")
 }
 
 # Load roxygen2
