@@ -155,10 +155,9 @@ test_that("calculate_mohns_rho() returns correct error messages", {
   #' @description Test that calculate_mohns_rho() errors with non-existent quantity.
   expect_error(
     object = calculate_mohns_rho(
-      retro_fit = retro_fit,
-      quantity = "non_existent_quantity"
-    ),
-    regexp = "not found in estimates data"
+      retro_fit = retro_fit, 
+      quantity = "non_existent_quantity"),
+    regexp = "not found in estimates"
   )
 })
 

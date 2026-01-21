@@ -12,7 +12,7 @@ containing \code{years_to_remove} (vector of years peeled) and \code{estimates}
 (data frame with retrospective results)}
 
 \item{quantity}{Character string specifying which quantity to calculate
-Mohn's rho for (e.g., "spawning_biomass", "recruitment")}
+Mohn's rho for (e.g., "spawning_biomass", "expected_recruitment")}
 }
 \value{
 A numeric value representing Mohn's rho. Values close to zero indicate
@@ -26,13 +26,15 @@ between estimates from retrospective peels and the reference model at the
 corresponding terminal year of each peel. A value close to zero suggests
 minimal retrospective bias, while larger absolute values indicate potential
 model misspecification or data conflicts.
-}
-\details{
+
 The formula for Mohn's rho is:
 \deqn{\rho = \frac{1}{n} \sum_{i=1}^{n} \frac{x_{peel,i} - x_{base,i}}{x_{base,i}}}
 where n is the number of retrospective peels, \eqn{x_{peel,i}} is the
 estimated value from peel i at its terminal year, and \eqn{x_{base,i}} is
 the value from the base model at that same year.
+}
+\details{
+Calculate Mohn's rho for retrospective analysis
 }
 \examples{
 \dontrun{
@@ -58,7 +60,7 @@ retro_fit <- run_fims_retrospective(
 rho_ssb <- calculate_mohns_rho(retro_fit, quantity = "spawning_biomass")
 
 # Calculate Mohn's rho for recruitment
-rho_rec <- calculate_mohns_rho(retro_fit, quantity = "recruitment")
+rho_rec <- calculate_mohns_rho(retro_fit, quantity = "expected_recruitment")
 }
 }
 \references{

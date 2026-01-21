@@ -92,9 +92,9 @@ calculate_mohns_rho <- function(retro_fit, quantity) {
   retro_estimates <- retro_fit[["estimates"]] |>
     dplyr::filter(.data$label %in% quantity)
   
-  # Check if the quantity exists in the data
+  # Check that the quantity exists in the estimates
   if (nrow(retro_estimates) == 0) {
-    cli::cli_abort("quantity '{quantity}' not found in estimates data")
+    cli::cli_abort("Quantity {.val {quantity}} not found in estimates. Check the {.field label} column")
   }
   
   # Initialize vector to store relative differences
