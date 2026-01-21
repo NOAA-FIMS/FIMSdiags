@@ -20,7 +20,7 @@
 #' containing `years_to_remove` (vector of years peeled) and `estimates` 
 #' (data frame with retrospective results)
 #' @param quantity Character string specifying which quantity to calculate 
-#' Mohn's rho for (e.g., "spawning_biomass", "recruitment")
+#' Mohn's rho for (e.g., "spawning_biomass", "expected_recruitment")
 #'
 #' @return A numeric value representing Mohn's rho. Values close to zero indicate
 #' minimal retrospective bias. Positive values suggest the model retrospectively 
@@ -66,7 +66,7 @@
 #' rho_ssb <- calculate_mohns_rho(retro_fit, quantity = "spawning_biomass")
 #' 
 #' # Calculate Mohn's rho for recruitment
-#' rho_rec <- calculate_mohns_rho(retro_fit, quantity = "recruitment")
+#' rho_rec <- calculate_mohns_rho(retro_fit, quantity = "expected_recruitment")
 #' }
 calculate_mohns_rho <- function(retro_fit, quantity) {
   

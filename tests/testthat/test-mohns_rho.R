@@ -58,7 +58,7 @@ test_that("calculate_mohns_rho() works with correct inputs", {
   )
   
   #' @description Test that calculate_mohns_rho() works with recruitment quantity.
-  rho_rec <- calculate_mohns_rho(retro_fit, quantity = "recruitment")
+  rho_rec <- calculate_mohns_rho(retro_fit, quantity = "expected_recruitment")
   
   expect_equal(
     object = class(rho_rec),
@@ -135,7 +135,7 @@ test_that("calculate_mohns_rho() returns correct error messages", {
   expect_error(
     object = calculate_mohns_rho(
       retro_fit = retro_fit,
-      quantity = c("spawning_biomass", "recruitment")
+      quantity = c("spawning_biomass", "expected_recruitment")
     ),
     regexp = "must be a single character string"
   )
