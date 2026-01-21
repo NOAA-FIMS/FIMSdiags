@@ -4,8 +4,8 @@
 #'
 #' @description
 #' Creates a visualization of retrospective analysis results, displaying
-#' spawning biomass and/or fishing mortality estimates from multiple
-#' retrospective peels. The plot includes point estimates with uncertainty
+#' spawning biomass estimates from multiple retrospective peels.
+#' The plot includes point estimates with uncertainty
 #' intervals to help identify retrospective patterns or bias.
 #'
 #' @details
@@ -13,7 +13,7 @@
 #' terminal years of data are removed. Each retrospective peel is displayed
 #' as a separate line with a unique color and line type. Confidence intervals
 #' are shown as shaded ribbons around each line, calculated as the estimate
-#' ± 1.96 × standard error (assuming normality).
+#' +/- 1.96 * standard error (assuming normality).
 #'
 #' When multiple quantities are specified, the plot uses facets to display
 #' each quantity in a separate panel with independent y-axes. This is useful
@@ -26,15 +26,15 @@
 #' @param retro_fit A list returned by [run_fims_retrospective()] containing:
 #'   * `years_to_remove` - Vector of years removed for each peel
 #'   * `estimates` - Data frame with model estimates for each retrospective run
-#' @param quantity A character vector specifying which quantities to plot.
-#'   Options include `"spawning_biomass"` and/or `"mortality_F"`. Default is
-#'   `c("spawning_biomass", "mortality_F")` to plot both. The values must
+#' @param quantity A character vector specifying which quantity to plot.
+#'   Currently, the only options is `"spawning_biomass"`. Default is
+#'   `"spawning_biomass"`. The values must
 #'   match entries in the `label` column of the estimates data frame
 #'
 #' @return
 #' A ggplot object displaying retrospective patterns. The plot includes:
 #' * Line plots for each retrospective peel
-#' * Shaded confidence intervals (±1.96 SE)
+#' * Shaded confidence intervals (+/-1.96 SE)
 #' * Different colors and line types for each peel
 #' * Facets by quantity if multiple quantities are specified
 #' * NOAA-themed styling via [stockplotr::theme_noaa()]
@@ -88,17 +88,11 @@
 #'   retro_fit = retro_fit,
 #'   quantity = "spawning_biomass"
 #' )
-#'
-#' # Plot both spawning biomass and fishing mortality
-#' plot_retrospective(
-#'   retro_fit = retro_fit,
-#'   quantity = c("spawning_biomass", "mortality_F")
-#' )
 #' }
 #'
-plot_retrospective <- function(retro_fit, quantity = c("spawning_biomass", "mortality_F")) {
+plot_retrospective <- function(retro_fit, quantity = "spawning_biomass") {
 
-  # filter rows in estimates_df to get spawning_biomass and mortality_F
+  # filter rows in estimates_df to get spawning_biomass
   retro_df <- retro_fit[["estimates"]] |>
     dplyr::filter(.data$label %in% quantity) |> #right now mortality_F is by year/age, so ignoring it for simplicity
     #TODO: some summarization to get total annual F values? 
