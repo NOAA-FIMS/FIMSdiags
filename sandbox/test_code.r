@@ -53,14 +53,13 @@ like_fit <- run_fims_likelihood(
   model = base_model,
   parameters = parameters,
   data = data1,
-  n_cores = 5,
+  n_cores = 3,
   min = -1,
   max = 1,
-  length = 5
+  length = 3
 )
 
 plot_likelihood(like_fit)
-
 # Clear memory post-run
 clear()
 
@@ -79,6 +78,9 @@ retro_fit <- run_fims_retrospective(
   parameters = parameters, 
   n_cores = 3
   )
+
+rho_sb <- calculate_mohns_rho(retro_fit, quantity = "spawning_biomass")
+rho_rec <- calculate_mohns_rho(retro_fit, quantity = "expected_recruitment")
 
 plot_retrospective(retro_fit, quantity = "spawning_biomass")
 
