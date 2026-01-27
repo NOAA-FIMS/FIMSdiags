@@ -5,9 +5,7 @@ name: pkgdown
 
 on:
   push:
-    branches: 
-      - main
-      - 8-improve-vignettes
+    branches: [main, '8-improve-vignettes']
 
 permissions:
   contents: read
