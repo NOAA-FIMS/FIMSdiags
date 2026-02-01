@@ -199,7 +199,7 @@ html, body {
     box-sizing: border-box !important;
 }
 
-.navbar-brand:hover, .navbar-brand:focus .navbar-brand:active {
+.navbar-brand:hover, .navbar-brand:focus, .navbar-brand:active {
   color: #0e6270;
 }
 
