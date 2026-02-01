@@ -1,5 +1,7 @@
 # FIMSdiags
 
+[![R-CMD-check](https://github.com/NOAA-FIMS/FIMSdiags/actions/workflows/call-r-cmd-check.yml/badge.svg)](https://github.com/NOAA-FIMS/FIMSdiags/actions/workflows/call-r-cmd-check.yml)
+
 FIMSdiags is a companion package to [FIMS](https://github.com/NOAA-FIMS/FIMS). It allows users to take a FIMS model and run common diagnostic analyses on their models. Currently the diagnostics included in the package are:
 
 -   Retrospective analysis

@@ -1,19 +1,5 @@
 url:  https://noaa-fims.github.io/FIMSdiags/
 
-navbar:
-  title: "FIMSdiags"
-  left:
-    - icon: fa-github
-      href: https://github.com/NOAA-FIMS/FIMSdiags
-    - text: "Vignettes"
-      menu:
-      - text: "Retrospective Analysis"
-        href: articles/retrospective.html
-      - text: "Likelihood Profile"
-        href: articles/likelihood_profile.html
-    - text: "Functions"
-      href: reference/index.html
-
 home:
   title: FIMSdiags
   links:
@@ -28,4 +14,49 @@ authors:
 
 template:
   bootstrap: 5
+  includes:
+    in_header: |
+      <link rel="preconnect" href="https://fonts.googleapis.com">
+      <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+      <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@100..900&display=swap" rel="stylesheet">
+
+articles:
+- title: FIMSdiags
+  contents:
+  - retrospective
+  - likelihood_profile
+
+reference:
+- title: Retrospective Analysis
+  desc: Functions for running and plotting retrospective analyses.
+  contents:
+  - run_fims_retrospective
+  - plot_retrospective
+  - calculate_mohns_rho
+
+- title: Likelihood Profile
+  desc: Functions for running and plotting likelihood profiles.
+  contents:
+  - run_fims_likelihood
+  - plot_likelihood
+
+- title: Helper Functions
+  desc: Supporting functions for FIMS diagnostics.
+  contents:
+  - run_modified_data_fims
+  - run_modified_pars_fims
+
+navbar:
+  structure:
+    left:
+      - reference
+      - articles
+    right:
+      - github
+      - search
+  components:
+    github:
+      icon: fa-brands fa-github fa-lg
+      href: https://github.com/NOAA-FIMS/FIMSdiags/
+      aria-label: GitHub repository for FIMSdiags
 
