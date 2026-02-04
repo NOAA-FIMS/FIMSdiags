@@ -79,6 +79,8 @@ like_fit <- run_fims_likelihood(
 To visualize the profile, use the function `plot_likelihood`. The plot shows the change in total likelihood over the R~0~ values profiled in the solid black line, and the change in likelihood for each data type in the color lines below it. This plot indicates that the R~0~ value estimated by the base model (13.9) is the value that leads to the lowest likelihood and all of the data types support this (i.e. the data do not conflict).  
 
 ```{r}
+#| fig.alt: >
+#|   Curved lines showing change in likelihood in total and for each data type.
 plot_likelihood(like_fit)
 
 ```
@@ -86,6 +88,8 @@ plot_likelihood(like_fit)
 This function creates a `ggplot` object that can be customized and added onto as a normal `ggplot` can. The default theme is `stockplotr::theme_noaa`, however to change the theme or colors used, you can simply add them after the main plot function. 
 
 ```{r}
+#| fig.alt: >
+#|   The same curved line plot as the one above but with a different ggplot theme.
 plot_likelihood(like_fit) +
 ggplot2::theme_bw()
 ```
