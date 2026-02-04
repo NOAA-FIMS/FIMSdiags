@@ -8,7 +8,13 @@ FIMSdiags is a companion package to [FIMS](https://github.com/NOAA-FIMS/FIMS). I
 
 -   Likelihood profile
 
-## Istalling FIMSdiags  
+## Learning FIMSdiags
+
+The two FIMSdiags functions each have a vignette describing how to apply them to a FIMS model. These are available in the <a href="https://noaa-fims.github.io/FIMSdiags/articles/index.html" target="_blank">articles</a> section of the FIMS github.io website.
+
+The help documentation for each function is available within R via a command like `?FIMSdiags::fims_likelihood`.
+
+## Installing FIMSdiags  
 
 Install the most recent version of FIMSdiags using the following code:
 
@@ -31,4 +37,4 @@ Software code created by U.S. Government employees is not subject to copyright i
 
 <img src="https://raw.githubusercontent.com/nmfs-general-modeling-tools/nmfspalette/main/man/figures/noaa-fisheries-rgb-2line-horizontal-small.png" alt="NOAA Fisheries" height="75"/>
 
-[U.S. Department of Commerce](https://www.commerce.gov/) \| [National Oceanographic and Atmospheric Administration](https://www.noaa.gov) \| [NOAA Fisheries](https://www.fisheries.noaa.gov/)
+[U.S. Department of Commerce](https://www.commerce.gov/) \| [National Oceanic and Atmospheric Administration](https://www.noaa.gov) \| [NOAA Fisheries](https://www.fisheries.noaa.gov/)
