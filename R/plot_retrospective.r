@@ -27,9 +27,9 @@
 #'   * `years_to_remove` - Vector of years removed for each peel
 #'   * `estimates` - Data frame with model estimates for each retrospective run
 #' @param quantity A character vector specifying which quantity to plot.
-#'   Currently, the only options is `"spawning_biomass"`. Default is
+#'   Currently, the only option is the default, 
 #'   `"spawning_biomass"`. The values must
-#'   match entries in the `label` column of the estimates data frame
+#'   match entries in the `label` column of the estimates data frame.
 #'
 #' @return
 #' A ggplot object displaying retrospective patterns. The plot includes:
