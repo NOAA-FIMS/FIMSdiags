@@ -46,8 +46,8 @@ test_that("run_fims_retrospective() works with correct inputs", {
 
 retro_ssb <- retro_fit[["estimates"]] |>
     dplyr::filter(label == "spawning_biomass") |>
-    dplyr::select(label, year_i, estimated, retro_year) |>
-    tidyr::pivot_wider(names_from = retro_year, values_from = estimated) |>
+    dplyr::select(label, year_i, estimated, retrospective_peel) |>
+    tidyr::pivot_wider(names_from = retrospective_peel, values_from = estimated) |>
     dplyr::filter(year_i == 31) |>
     dplyr::select(-c(1,2)) |>
     as.numeric()

@@ -49,7 +49,7 @@
 #'   * `age_i` - Age index (if applicable)
 #'   * `estimated` - Point estimate value
 #'   * `uncertainty` - Standard error of the estimate
-#'   * `retro_year` - Number of years removed for this peel
+#'   * `retrospective_peel` - Number of years removed for this peel
 #'
 #' @references
 #' Mohn, R. 1999. The retrospective problem in sequential population analysis:
@@ -156,7 +156,7 @@ run_fims_retrospective <- function(
     )
 
     for (i in seq_along(estimates_list)) {
-        estimates_list[[i]]$retro_year <- years_to_remove[i]
+        estimates_list[[i]]$retrospective_peel <- years_to_remove[i]
     }
     estimates_df <- do.call(rbind, estimates_list)
 

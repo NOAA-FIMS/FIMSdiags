@@ -87,12 +87,12 @@ plot_retrospective(retro_fit, quantity = "spawning_biomass")
 library(ggplot2)
 retro_fit[["estimates"]] |>
 dplyr::filter(label == "spawning_biomass") |> 
-dplyr::select(label, year_i, estimated, retro_year) |>
-dplyr::group_by(label, retro_year) |>
-dplyr::filter(dplyr::row_number() <= dplyr::n() - retro_year) |>
+dplyr::select(label, year_i, estimated, retrospective_peel) |>
+dplyr::group_by(label, retrospective_peel) |>
+dplyr::filter(dplyr::row_number() <= dplyr::n() - retrospective_peel) |>
 dplyr::ungroup() |> 
-ggplot(aes(x = year_i, y = estimated, group = as.factor(retro_year))) +
-geom_line(aes(color = as.factor(retro_year)), linewidth = 1.2) +
+ggplot(aes(x = year_i, y = estimated, group = as.factor(retrospective_peel))) +
+geom_line(aes(color = as.factor(retrospective_peel)), linewidth = 1.2) +
 stockplotr::theme_noaa(discrete = T)
 
 # to debug for json errors: 

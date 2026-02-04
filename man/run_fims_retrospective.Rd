@@ -37,7 +37,7 @@ runs, with the following key columns:
 \item \code{age_i} - Age index (if applicable)
 \item \code{estimated} - Point estimate value
 \item \code{uncertainty} - Standard error of the estimate
-\item \code{retro_year} - Number of years removed for this peel
+\item \code{retrospective_peel} - Number of years removed for this peel
 }
 }
 }
