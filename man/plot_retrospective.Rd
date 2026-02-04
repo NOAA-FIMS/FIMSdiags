@@ -14,9 +14,9 @@ plot_retrospective(retro_fit, quantity = "spawning_biomass")
 }}
 
 \item{quantity}{A character vector specifying which quantity to plot.
-Currently, the only option is \code{"spawning_biomass"}. Default is
+Currently, the only option is the default,
 \code{"spawning_biomass"}. The values must
-match entries in the \code{label} column of the estimates data frame}
+match entries in the \code{label} column of the estimates data frame.}
 }
 \value{
 A ggplot object displaying retrospective patterns. The plot includes:
