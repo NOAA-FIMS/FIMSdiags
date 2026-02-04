@@ -108,13 +108,13 @@ calculate_mohns_rho <- function(retro_fit, quantity) {
     # Get value for ending year of peeled model
     peel_value <- retro_estimates |>
       dplyr::filter(.data$year_i == end_year[i]) |>
-      dplyr::filter(.data$retro_year == retro_fit$years_to_remove[i]) |>
+      dplyr::filter(.data$retrospective_peel == retro_fit$years_to_remove[i]) |>
       dplyr::pull(.data$estimated)
     
     # Get value from the same year for the reference model
     ref_value <- retro_estimates |>
       dplyr::filter(.data$year_i == end_year[i]) |>
-      dplyr::filter(.data$retro_year == retro_fit$years_to_remove[1]) |>
+      dplyr::filter(.data$retrospective_peel == retro_fit$years_to_remove[1]) |>
       dplyr::pull(.data$estimated)
     
     # Check for missing or invalid values
