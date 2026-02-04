@@ -102,14 +102,21 @@ plot_retrospective <- function(retro_fit, quantity = "spawning_biomass") {
                   upper_CI = .data$estimated + (1.96 * .data$uncertainty),
                   retro_year = factor(.data$retro_year)) #assuming uncertainty is SE, TODO: check this assumption
 
+  max_year <- max(retro_df$year_i)
+  retro_df <- retro_df |>
+    dplyr::mutate(retro_year_num = as.numeric(as.character(.data$retro_year))) |>
+    dplyr::filter(.data$year_i <= (max_year - .data$retro_year_num)) |> 
+    dplyr::select(-.data$retro_year_num)
+
   retro_plot <- ggplot2::ggplot(data = retro_df, ggplot2::aes(x = .data$year_i)) +
-    ggplot2::geom_ribbon(ggplot2::aes(ymin = .data$lower_CI, 
+    ggplot2::geom_ribbon(ggplot2::aes(ymin = .data$lower_CI, #for every line or just the reference line?
                                       ymax = .data$upper_CI, 
-                                      fill = .data$retro_year), alpha = .45) +   # should this be conditional?
+                                      fill = .data$retro_year), alpha = .25) +   # should this be conditional?
     ggplot2::geom_line(ggplot2::aes(y = .data$estimated, 
                                     color = .data$retro_year, 
-                                    linetype = .data$retro_year)) +
-    stockplotr::theme_noaa(discrete = TRUE) 
+                                    linetype = .data$retro_year), linewidth = 1.2) +
+    stockplotr::theme_noaa(discrete = TRUE) +
+    ggplot2::labs(x = "Year", y = tools::toTitleCase(gsub("_", " ", quantity)))
 
   if(length(unique(quantity)) > 1){
     retro_plot <- retro_plot + 
