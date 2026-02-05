@@ -18,10 +18,9 @@ knitr::opts_chunk$set(
 ```
 
 ```{r setup}
-#library(FIMSdiags)
+library(FIMSdiags)
 library(FIMS)
 packageVersion("FIMS")
-devtools::load_all()
 clear()
 ```
 
@@ -58,11 +57,7 @@ where $n$ is the number of retrospective peels, $x_{p, y}$ is the estimated valu
 
 Some things to note about the  `run_fims_retrospective()` function, you can provide data that is already a `FIMSFrame` object or you can give it one that is not. In the example below, we are using the `FIMSFrame` data object (`data_4_model`) created above. Additionally, it expects a vector of positive values of `years_to_remove` from the base model, starting from 0. If you are running many peels, it may be more efficient to use multiple cores, which can be specified by the `n_cores` argument. 
 
-::: {.callout-warning}
-## Note
-
-If left empty, the default for `n_cores` is one less than the number of cores on your machine so this could unexpectedly use up a lot of your computing power. 
-:::
+> NOTE: If left empty, the default for `n_cores` is one less than the number of cores on your machine so this could unexpectedly use up a lot of your computing power. 
 
 ```{r, retro}
 retro_fit <- run_fims_retrospective(years_to_remove = 0:2, 
