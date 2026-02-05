@@ -66,6 +66,13 @@ retro_fit <- run_fims_retrospective(years_to_remove = 0:2,
 
 ```
 
+## Mohn's Rho  
+Once you have run a retrospective, you can then calculate the Mohn's rho statistic for spawning biomass by: 
+
+```{r, mohns_rho}
+rho_sb <- calculate_mohns_rho(retro_fit, quantity = "spawning_biomass")
+```
+
 ## Visualize the results  
 To visualize the results of the retrospective analysis, we can use `plot_retrospective` to display the quantity of interest. Below, we want to assess the impact on spawning biomass. The function returns a `ggplot` object so to customize the default figure, you can add layers as you normally would to a `ggplot`. For example, below, we specify the x and y axes labels and the legend title. 
 
