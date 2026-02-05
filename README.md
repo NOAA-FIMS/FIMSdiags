@@ -2,7 +2,7 @@
 
 [![R-CMD-check](https://github.com/NOAA-FIMS/FIMSdiags/actions/workflows/call-r-cmd-check.yml/badge.svg)](https://github.com/NOAA-FIMS/FIMSdiags/actions/workflows/call-r-cmd-check.yml)
 
-FIMSdiags is a companion package to [FIMS](https://github.com/NOAA-FIMS/FIMS). It allows users to take a FIMS model and run common diagnostic analyses on their models. Currently the diagnostics included in the package are:
+FIMSdiags is a companion package to [FIMS](https://github.com/NOAA-FIMS/FIMS). It allows users to take a FIMS model and run common diagnostic analyses on their models. FIMSdiags is in active development and we are continuously adding features and improving current ones. Currently, the available diagnostics in the package are:
 
 -   Retrospective analysis
 
@@ -10,9 +10,9 @@ FIMSdiags is a companion package to [FIMS](https://github.com/NOAA-FIMS/FIMS). I
 
 ## Learning FIMSdiags
 
-The two FIMSdiags functions each have a vignette describing how to apply them to a FIMS model. These are available in the <a href="https://noaa-fims.github.io/FIMSdiags/articles/index.html" target="_blank">articles</a> section of the FIMS github.io website.
+Each FIMSdiags function has a vignette describing how to apply them to a FIMS model. These are available in the <a href="https://noaa-fims.github.io/FIMSdiags/articles/index.html" target="_blank">articles</a> section of the FIMS github.io website.
 
-The help documentation for each function is available within R via a command like `?FIMSdiags::fims_likelihood`.
+The help documentation for each function is available within R via a command like `?FIMSdiags::run_fims_likelihood`.
 
 ## Installing FIMSdiags  
 
@@ -22,10 +22,16 @@ Install the most recent version of FIMSdiags using the following code:
 install.packages("remotes")
 remotes::install_github("NOAA-FIMS/FIMSdiags")
 ```
+or using {renv}: 
+```R
+renv::install("NOAA-FIMS/FIMSdiags")
+# Update lockfile once package is installed
+renv::snapshot()
+```
 
-## Reporting an Issue  
+## Getting Help 
 
-Please report any bugs or issues along with a minimal reproducible example [here](https://github.com/NOAA-FIMS/FIMSdiags/issues).
+If you encounter a bug, please open an [issue](https://github.com/NOAA-FIMS/FIMSdiags/issues) and provide a minimal reproducible example. If you have a question or an idea for future development, feel free to post to the [Discussion Board](https://github.com/orgs/NOAA-FIMS/discussions). We welcome all ideas and suggestions. 
 
 ## NOAA Disclaimer
 
