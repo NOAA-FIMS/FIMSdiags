@@ -10,7 +10,7 @@ FIMSdiags is a companion package to [FIMS](https://github.com/NOAA-FIMS/FIMS). I
 
 ## Learning FIMSdiags
 
-Each FIMSdiags function has a vignette describing how to apply them to a FIMS model. These are available in the <a href="https://noaa-fims.github.io/FIMSdiags/articles/index.html" target="_blank">articles</a> section of the FIMS github.io website.
+Each FIMSdiags function has a vignette describing how to apply them to a FIMS model. These are available in the <a href="https://noaa-fims.github.io/FIMSdiags/articles/index.html" target="_blank">articles</a> section of the [FIMS github.io website](https://noaa-fims.github.io/FIMSdiags/).
 
 The help documentation for each function is available within R via a command like `?FIMSdiags::run_fims_likelihood`.
 
