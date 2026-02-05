@@ -76,11 +76,8 @@ rho_sb <- calculate_mohns_rho(retro_fit, quantity = "spawning_biomass")
 ## Visualize the results  
 To visualize the results of the retrospective analysis, we can use `plot_retrospective` to display the quantity of interest. Below, we want to assess the impact on spawning biomass. The function returns a `ggplot` object so to customize the default figure, you can add layers as you normally would to a `ggplot`. For example, below, we specify the x and y axes labels and the legend title. 
 
-::: {.callout-caution}
-## Under development
+> 🚧 **Under development** We are actively working on expanding which quantities can be visualized with the `plot_retrospective` function but for now, it is limited to `spawning_biomass`. 
 
-We are actively working on expanding which quantities can be visualized with the `plot_retrospective` function but for now, it is limited to `spawning_biomass`. 
-:::
 
 ```{r}
 # plot the SSB time series from each model
