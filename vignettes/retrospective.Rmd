@@ -81,11 +81,12 @@ To visualize the results of the retrospective analysis, we can use `plot_retrosp
 
 ```{r}
 # plot the SSB time series from each model
-plot_retrospective(retro_fit) + 
+fig_retrospective_ssb <- plot_retrospective(retro_fit) + 
 ggplot2::labs(x = "Year", y = "Spawning Biomass") +
 ggplot2::guides(fill = ggplot2::guide_legend(title = "Retro Peel"), 
 color = ggplot2::guide_legend(title = "Retro Peel"),
 linetype = ggplot2::guide_legend(title = "Retro Peel"))
+print(fig_retrospective_ssb)
 ```
 
 We can compare the spawning biomass estimates from the reference model and each peel for the last six years. 
