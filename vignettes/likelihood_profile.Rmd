@@ -75,7 +75,8 @@ To visualize the profile, use the function `plot_likelihood`. The plot shows the
 ```{r}
 #| fig.alt: >
 #|   Curved lines showing change in likelihood in total and for each data type.
-plot_likelihood(like_fit)
+fig_likelihood_profile <- plot_likelihood(like_fit)
+print(fig_likelihood_profile)
 
 ```
 
@@ -84,8 +85,9 @@ This function creates a `ggplot` object that can be customized and added onto as
 ```{r}
 #| fig.alt: >
 #|   The same curved line plot as the one above but with a different ggplot theme.
-plot_likelihood(like_fit) +
+fig_likelihood_custom_theme <- plot_likelihood(like_fit) +
 ggplot2::theme_bw()
+print(fig_likelihood_custom_theme)
 ```
 
 ## Clean up 
