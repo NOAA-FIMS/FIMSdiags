@@ -2,8 +2,7 @@
 % Please edit documentation in R/run_modified_fims.r
 \name{run_modified_pars_fims}
 \alias{run_modified_pars_fims}
-\title{Modify a parameter input and run a FIMS model
-This function is called by run_fims_likelihood()}
+\title{Modify Parameters of a FIMS Model}
 \usage{
 run_modified_pars_fims(
   new_value,

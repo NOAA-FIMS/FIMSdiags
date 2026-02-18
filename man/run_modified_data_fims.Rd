@@ -2,8 +2,7 @@
 % Please edit documentation in R/run_modified_fims.r
 \name{run_modified_data_fims}
 \alias{run_modified_data_fims}
-\title{Function to remove a given number of years of data and run FIMS model
-This function is called by run_fims_retrospective()}
+\title{Modify data for a FIMS Model}
 \usage{
 run_modified_data_fims(years_to_remove = 0, data, parameters)
 }
