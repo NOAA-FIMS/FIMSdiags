@@ -28,7 +28,7 @@ This should match a value in the \code{label} column of the parameters tibble.}
 FIMS model fitted to the new parameter input value
 }
 \description{
-Modify a parameter input and run a FIMS model
+Modify a parameter input and run a FIMS model.
 This function is called by run_fims_likelihood()
 }
 \examples{

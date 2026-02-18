@@ -17,7 +17,7 @@ run_modified_data_fims(years_to_remove = 0, data, parameters)
 FIMS model fitted with years of data removed
 }
 \description{
-Function to remove a given number of years of data and run FIMS model
+Function to remove a given number of years of data and run FIMS model.
 This function is called by run_fims_retrospective()
 }
 \examples{

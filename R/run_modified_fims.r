@@ -1,7 +1,7 @@
 #' @title Modify Parameters of a FIMS Model 
 #' 
 #' @description 
-#' Modify a parameter input and run a FIMS model
+#' Modify a parameter input and run a FIMS model.
 #' This function is called by run_fims_likelihood()
 #'
 #' @param new_value The new value to be changed in the FIMS model.
@@ -94,7 +94,7 @@ run_modified_pars_fims <- function(
 #' @title Modify data for a FIMS Model
 #' 
 #' @description
-#' Function to remove a given number of years of data and run FIMS model
+#' Function to remove a given number of years of data and run FIMS model.
 #' This function is called by run_fims_retrospective()
 #'
 #' @param years_to_remove number of years to remove
