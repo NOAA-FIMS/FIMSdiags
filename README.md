@@ -28,6 +28,52 @@ renv::install("NOAA-FIMS/FIMSdiags")
 # Update lockfile once package is installed
 renv::snapshot()
 ```
+## Usage  
+
+```R
+library(FIMS)
+library(FIMSdiags)
+
+# Prepare data for FIMS model
+data("data1")
+data_4_model <- FIMSFrame(data1)
+
+# Create parameters
+parameters <- data_4_model |>
+  create_default_configurations() |>
+  create_default_parameters(data = data_4_model)
+
+# Run the base model
+base_model <- parameters |>
+  initialize_fims(data = data_4_model) |>
+  fit_fims(optimize = TRUE)
+
+# Run a likelihood profile over R0 
+like_fit <- run_fims_likelihood(
+  model = base_model,
+  parameters = parameters,
+  data = data1,
+  parameter_name = "log_rzero",
+  n_cores = 3,
+  min = -1,
+  max = 1,
+  length = 3
+)
+
+plot_likelihood(like_fit)
+clear()
+
+# Run a retrospective analysis for 5 years
+retro_fit <- run_fims_retrospective(
+  years_to_remove = 0:5, 
+  data = data1, 
+  parameters = parameters, 
+  n_cores = 3
+  )
+
+plot_retrospective(retro_fit, quantity = "spawning_biomass")
+clear()
+```
 
 ## Getting Help 
 
