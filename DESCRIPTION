@@ -1,13 +1,13 @@
 Package: FIMSdiags
 Title: Diagnostics for FIMS Models
-Version: 0.0.0.9000
+Version: 0.1.0
 Authors@R: c(
     person("Megumi", "Oshima", , "megumi.oshima@noaa.gov", role = c("aut", "cre")),
     person("Ian", "Taylor", , "ian.taylor@noaa.gov", role = "aut")
   )
-Description: What the package does (one paragraph).
+Description: FIMSdiags is a companion package to FIMS. It allows users to take a FIMS model and run common diagnostic analyses on their models. FIMSdiags is in active development and we are continuously adding features and improving current ones.
 License: GPL (>= 3) | file LICENSE
-URL: https://expert-barnacle-zr8w61g.pages.github.io/
+URL: https://noaa-fims.github.io/FIMSdiags/
 Imports:
     cli,
     dplyr,
