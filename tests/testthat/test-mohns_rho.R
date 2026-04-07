@@ -13,9 +13,9 @@
 # clear memory (FIMS function to clear TMB memory)
 clear()
 ## Load sample data
-data("data1")
+data("data_big")
 # Prepare data for FIMS model
-data_4_model <- FIMSFrame(data1)
+data_4_model <- FIMSFrame(data_big)
 # Create parameters
 parameters <- data_4_model |>
   create_default_configurations() |>
@@ -24,7 +24,7 @@ parameters <- data_4_model |>
 # Run retrospective analysis for testing
 retro_fit <- run_fims_retrospective(
   years_to_remove = 0:2, 
-  data = data1, 
+  data = data_big, 
   parameters = parameters, 
   n_cores = 1
 )
@@ -75,7 +75,7 @@ test_that("calculate_mohns_rho() handles edge cases correctly", {
   #' @description Test that calculate_mohns_rho() works with single peel (years_to_remove = 0:1).
   retro_fit_single <- run_fims_retrospective(
     years_to_remove = 0:1,
-    data = data1,
+    data = data_big,
     parameters = parameters,
     n_cores = 1
   )

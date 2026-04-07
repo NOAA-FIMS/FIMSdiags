@@ -36,8 +36,8 @@ This function is called by run_fims_likelihood()
 \dontrun{
  library(FIMS)
 # Use built-in dataset from FIMS
- data("data1")
- data_4_model <- FIMSFrame(data1)
+ data("data_big")
+ data_4_model <- FIMSFrame(data_big)
 # Create a parameters object
  parameters <- data_4_model |>
  create_default_configurations() |>
@@ -45,6 +45,6 @@ This function is called by run_fims_likelihood()
 # Fit a FIMS model with 1 year of data removed
  fit <- run_modified_pars_fims(new_value = 12.9, 
    parameter_name = "log_rzero", 
-   parameters = parameters, data = data1)
+   parameters = parameters, data = data_big)
 }
 }

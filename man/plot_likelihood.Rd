@@ -64,8 +64,8 @@ individual data components use colors from the viridis palette.
 library(FIMS)
 
 # Use built-in dataset from FIMS
-data("data1")
-data_4_model <- FIMSFrame(data1)
+data("data_big")
+data_4_model <- FIMSFrame(data_big)
 
 # Create parameters object
 parameters <- data_4_model |>
@@ -81,7 +81,7 @@ base_model <- parameters |>
 like_fit <- run_fims_likelihood(
   model = base_model,
   parameters = parameters,
-  data = data1,
+  data = data_big,
   parameter_name = "log_rzero",
   n_cores = 3,
   min = -1,

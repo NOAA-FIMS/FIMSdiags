@@ -14,9 +14,9 @@
 clear()
 ## Testing how to remove one year of data and run multiple FIMS models
 # Load sample data
-data("data1")
+data("data_big")
 # Prepare data for FIMS model
-data_4_model <- FIMSFrame(data1)
+data_4_model <- FIMSFrame(data_big)
 # Create parameters
 parameters <- data_4_model |>
   create_default_configurations() |>
@@ -37,7 +37,7 @@ test_that("fims_likelihood() works with correct inputs", {
   like_fit <- run_fims_likelihood(
     model = base_model,
     parameters = parameters,
-    data = data1,
+    data = data_big,
     n_cores = 1,
     min = -1,
     max = 1,
@@ -77,7 +77,7 @@ test_that("run_fims_likelihood() handles edge cases correctly", {
   like_fit_min <- run_fims_likelihood(
     model = base_model,
     parameters = parameters,
-    data = data1,
+    data = data_big,
     n_cores = 1,
     min = -1,
     max = 1,
@@ -92,7 +92,7 @@ test_that("run_fims_likelihood() handles edge cases correctly", {
   like_fit_seq <- run_fims_likelihood(
     model = base_model,
     parameters = parameters,
-    data = data1,
+    data = data_big,
     n_cores = 1,
     min = -0.5,
     max = 0.5,
@@ -110,7 +110,7 @@ cli::test_that_cli("run_fims_likelihood() shows warning when min and max don't s
     run_fims_likelihood(
       model = base_model,
       parameters = parameters,
-      data = data1,
+      data = data_big,
       n_cores = 1,
       min = 0.1,
       max = 0.2,
@@ -126,7 +126,7 @@ cli::test_that_cli("run_fims_likelihood() shows warning when min and max don't s
 #     run_fims_likelihood(
 #       model = base_model,
 #       parameters = parameters,
-#       data = data1,
+#       data = data_big,
 #       n_cores = 1,
 #       min = -0.1,
 #       max = 0.1,
@@ -142,7 +142,7 @@ test_that("run_fims_likelihood() returns correct error messages", {
     object = run_fims_likelihood(
       model = base_model,
       parameters = parameters,
-      data = data1,
+      data = data_big,
       n_cores = 1,
       length = -1
     ),
@@ -154,7 +154,7 @@ test_that("run_fims_likelihood() returns correct error messages", {
     object = run_fims_likelihood(
       model = base_model,
       parameters = parameters,
-      data = data1,
+      data = data_big,
       n_cores = 1,
       length = 0
     ),
@@ -166,7 +166,7 @@ test_that("run_fims_likelihood() returns correct error messages", {
     object = run_fims_likelihood(
       model = base_model,
       parameters = parameters,
-      data = data1,
+      data = data_big,
       n_cores = 1,
       length = 3.5
     ),
@@ -178,7 +178,7 @@ test_that("run_fims_likelihood() returns correct error messages", {
     object = run_fims_likelihood(
       model = base_model,
       parameters = parameters,
-      data = data1,
+      data = data_big,
       n_cores = 1,
       min = 1,
       max = 0
@@ -191,7 +191,7 @@ test_that("run_fims_likelihood() returns correct error messages", {
     object = run_fims_likelihood(
       model = base_model,
       parameters = parameters,
-      data = data1,
+      data = data_big,
       n_cores = 1,
       min = 1,
       max = 1
@@ -204,7 +204,7 @@ test_that("run_fims_likelihood() returns correct error messages", {
     object = run_fims_likelihood(
       model = base_model,
       parameters = parameters,
-      data = data1,
+      data = data_big,
       n_cores = 2.5,
       length = 3
     ),
@@ -216,7 +216,7 @@ test_that("run_fims_likelihood() returns correct error messages", {
     object = run_fims_likelihood(
       model = base_model,
       parameters = parameters,
-      data = data1,
+      data = data_big,
       n_cores = 0,
       length = 3
     ),
@@ -228,7 +228,7 @@ test_that("run_fims_likelihood() returns correct error messages", {
     object = run_fims_likelihood(
       model = base_model,
       parameters = parameters,
-      data = data1,
+      data = data_big,
       n_cores = -1,
       length = 3
     ),
@@ -240,7 +240,7 @@ test_that("run_fims_likelihood() returns correct error messages", {
     object = run_fims_likelihood(
       model = list(fake = "model"),
       parameters = parameters,
-      data = data1,
+      data = data_big,
       n_cores = 1,
       length = 3
     ),
@@ -252,7 +252,7 @@ test_that("run_fims_likelihood() returns correct error messages", {
     object = run_fims_likelihood(
       model = base_model,
       parameters = parameters,
-      data = data1,
+      data = data_big,
       module_name = "nonexistent_module",
       parameter_name = "log_rzero",
       n_cores = 1,
@@ -266,7 +266,7 @@ test_that("run_fims_likelihood() returns correct error messages", {
     object = run_fims_likelihood(
       model = base_model,
       parameters = parameters,
-      data = data1,
+      data = data_big,
       parameter_name = "nonexistent_parameter",
       n_cores = 1,
       length = 3
