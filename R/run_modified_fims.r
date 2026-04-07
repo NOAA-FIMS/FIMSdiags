@@ -137,7 +137,7 @@ run_modified_data_fims <- function(years_to_remove = 0, data, parameters) {
     } else {
         data_mod <- data_to_use |>
             dplyr::filter(
-                (.data[["type"]] %in% c("age-to-length-conversion", "weight_at_age")) |
+                (.data[["type"]] %in% c("age_to_length_conversion", "weight_at_age")) |
                     .data[["timing"]] <= max(.data[["timing"]]) - years_to_remove 
             )
     }

@@ -12,7 +12,7 @@ years_to_remove = 2
 # Prepare data for FIMS model
  data_mod <- data_big |>
             dplyr::filter(
-                (type %in% c("age-to-length-conversion", "weight_at_age")) |
+                (type %in% c("age_to_length_conversion", "weight_at_age")) |
                     timing <= max(timing) - years_to_remove 
             )
 # convert to FIMSFrame format

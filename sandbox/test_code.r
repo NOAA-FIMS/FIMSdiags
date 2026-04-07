@@ -67,7 +67,7 @@ clear()
 # need to keep catch and weight_at_age data, just remove indices, length comp, and age comps
 data2 <- data_big |>
             dplyr::filter(
-                !(type %in% c("index", "age", "length", "age-to-length-conversion")) |
+                !(type %in% c("index", "age", "length", "age_to_length_conversion")) |
                 dateend <= max(dateend) - lubridate::years(years_to_remove) #TODO: change dateend to timing and change the years to remove
             )
 
