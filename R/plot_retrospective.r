@@ -62,8 +62,8 @@
 #' library(FIMS)
 #'
 #' # Use built-in dataset from FIMS
-#' data("data1")
-#' data_4_model <- FIMSFrame(data1)
+#' data("data_big")
+#' data_4_model <- FIMSFrame(data_big)
 #'
 #' # Create parameters object
 #' parameters <- data_4_model |>
@@ -78,7 +78,7 @@
 #' # Run retrospective analysis
 #' retro_fit <- run_fims_retrospective(
 #'   years_to_remove = 0:5,
-#'   data = data1,
+#'   data = data_big,
 #'   parameters = parameters,
 #'   n_cores = 1
 #' )

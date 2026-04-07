@@ -1,3 +1,7 @@
+# FIMSdiags 0.1.1
+
+* Fixes bug in example code (example input data was renamed)
+
 # FIMSdiags 0.1.0
 
 * Initial release of FIMSdiags. Works with current version of FIMS (0.9.2).

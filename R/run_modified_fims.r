@@ -19,8 +19,8 @@
 #' \dontrun{
 #'  library(FIMS)
 #' # Use built-in dataset from FIMS
-#'  data("data1")
-#'  data_4_model <- FIMSFrame(data1)
+#'  data("data_big")
+#'  data_4_model <- FIMSFrame(data_big)
 #' # Create a parameters object
 #'  parameters <- data_4_model |>
 #'  create_default_configurations() |>
@@ -28,7 +28,7 @@
 #' # Fit a FIMS model with 1 year of data removed
 #'  fit <- run_modified_pars_fims(new_value = 12.9, 
 #'    parameter_name = "log_rzero", 
-#'    parameters = parameters, data = data1)
+#'    parameters = parameters, data = data_big)
 #' }
 
 run_modified_pars_fims <- function(
@@ -108,14 +108,14 @@ run_modified_pars_fims <- function(
 #' \dontrun{
 #'  library(FIMS)
 #' # Use built-in dataset from FIMS
-#'  data("data1")
-#'  data_4_model <- FIMSFrame(data1)
+#'  data("data_big")
+#'  data_4_model <- FIMSFrame(data_big)
 #' # Create a parameters object
 #'  parameters <- data_4_model |>
 #'  create_default_configurations() |>
 #'  create_default_parameters(data = data_4_model)
 #' # Fit a FIMS model with 1 year of data removed
-#'  fit <- run_modified_data_fims(years_to_remove = 1, data = data1, parameters = parameters)
+#'  fit <- run_modified_data_fims(years_to_remove = 1, data = data_big, parameters = parameters)
 #' }
 
 run_modified_data_fims <- function(years_to_remove = 0, data, parameters) {
@@ -143,7 +143,7 @@ run_modified_data_fims <- function(years_to_remove = 0, data, parameters) {
     } else {
         data_mod <- data_to_use |>
             dplyr::filter(
-                (.data[["type"]] %in% c("age-to-length-conversion", "weight-at-age")) |
+                (.data[["type"]] %in% c("age-to-length-conversion", "weight_at_age")) |
                     .data[["timing"]] <= max(.data[["timing"]]) - years_to_remove 
             )
     }

@@ -40,9 +40,9 @@ Calculate Mohn's rho for retrospective analysis
 \dontrun{
 library(FIMS)
 # Use built-in dataset from FIMS
-data("data1")
+data("data_big")
 # Prepare data for FIMS model
-data_4_model <- FIMSFrame(data1)
+data_4_model <- FIMSFrame(data_big)
 # Create parameters
 parameters <- data_4_model |>
   create_default_configurations() |>
@@ -51,7 +51,7 @@ parameters <- data_4_model |>
 # Run retrospective analysis
 retro_fit <- run_fims_retrospective(
   years_to_remove = 0:5,
-  data = data1,
+  data = data_big,
   parameters = parameters,
   n_cores = 1
 )

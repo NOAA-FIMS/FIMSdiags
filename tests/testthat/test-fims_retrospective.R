@@ -14,9 +14,9 @@
 clear()
 ## Testing how to remove one year of data and run multiple FIMS models
 # Load sample data
-data("data1")
+data("data_big")
 # Prepare data for FIMS model
-data_4_model <- FIMSFrame(data1)
+data_4_model <- FIMSFrame(data_big)
 # Create parameters
 parameters <- data_4_model |>
   create_default_configurations() |>
@@ -28,7 +28,7 @@ test_that("run_fims_retrospective() works with correct inputs", {
   
   retro_fit <- run_fims_retrospective(
     years_to_remove = 0:2, 
-    data = data1, 
+    data = data_big, 
     parameters = parameters, 
     n_cores = 1
     )
@@ -66,7 +66,7 @@ test_that("run_fims_retrospective() handles edge cases correctly", {
   #' @description Test that run_fims_retrospective works with years_to_remove = 0.
   retro_fit_zero <- run_fims_retrospective(
     years_to_remove = 0,
-    data = data1,
+    data = data_big,
     parameters = parameters,
     n_cores = 1
   )
@@ -82,7 +82,7 @@ test_that("run_fims_retrospective() handles edge cases correctly", {
   #' @description Test that run_fims_retrospective works with n_cores = 1 (sequential).
   retro_fit_seq <- run_fims_retrospective(
     years_to_remove = 0:1,
-    data = data1,
+    data = data_big,
     parameters = parameters,
     n_cores = 1
   )
@@ -98,7 +98,7 @@ test_that("run_fims_retrospective() returns correct error messages", {
   expect_error(
     object = run_fims_retrospective(
       years_to_remove = 0:1,
-      data = data1,
+      data = data_big,
       parameters = parameters,
       n_cores = 2.5
     ),
@@ -109,7 +109,7 @@ test_that("run_fims_retrospective() returns correct error messages", {
   expect_error(
     object = run_fims_retrospective(
       years_to_remove = 0:1,
-      data = data1,
+      data = data_big,
       parameters = parameters,
       n_cores = 0
     ),
@@ -120,7 +120,7 @@ test_that("run_fims_retrospective() returns correct error messages", {
   expect_error(
     object = run_fims_retrospective(
       years_to_remove = 0:1,
-      data = data1,
+      data = data_big,
       parameters = parameters,
       n_cores = -1
     ),
@@ -131,7 +131,7 @@ test_that("run_fims_retrospective() returns correct error messages", {
   expect_error(
     object = run_fims_retrospective(
       years_to_remove = numeric(0),
-      data = data1,
+      data = data_big,
       parameters = parameters,
       n_cores = 1
     ),
@@ -142,7 +142,7 @@ test_that("run_fims_retrospective() returns correct error messages", {
   expect_error(
     object = run_fims_retrospective(
       years_to_remove = -1,
-      data = data1,
+      data = data_big,
       parameters = parameters,
       n_cores = 1
     ),
