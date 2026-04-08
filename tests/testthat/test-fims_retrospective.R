@@ -55,7 +55,7 @@ retro_ssb <- retro_fit[["estimates"]] |>
   #' @description Test that fims_retrospective(x) returns y.
   expect_equal(
     object = retro_ssb,
-    expected = c(1803.273, 2315.029, 3115.032),
+    expected = c(1728.686, 1654.160, 1500.182),
     tolerance = .1
   )
 
