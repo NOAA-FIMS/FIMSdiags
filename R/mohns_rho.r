@@ -101,7 +101,7 @@ calculate_mohns_rho <- function(retro_fit, quantity) {
   mohn_values <- numeric()
   
   # Calculate vector of ending year for each model
-  end_year <- max(retro_estimates$year_i) - retro_fit$years_to_remove
+  end_year <- max(retro_estimates$year_i, na.rm = TRUE) - retro_fit$years_to_remove
   
   # Calculate relative differences for each peel (excluding reference model)
   for (i in 2:length(retro_fit$years_to_remove)) {

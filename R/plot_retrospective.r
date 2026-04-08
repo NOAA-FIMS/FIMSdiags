@@ -102,7 +102,7 @@ plot_retrospective <- function(retro_fit, quantity = "spawning_biomass") {
                   upper_CI = .data$estimated + (1.96 * .data$uncertainty),
                   retrospective_peel = factor(.data$retrospective_peel)) #assuming uncertainty is SE, TODO: check this assumption
 
-  max_year <- max(retro_df$year_i)
+  max_year <- max(retro_df$year_i, na.rm = TRUE)
   retro_df <- retro_df |>
     dplyr::mutate(retrospective_peel_num = as.numeric(as.character(.data$retrospective_peel))) |>
     dplyr::filter(.data$year_i <= (max_year - .data$retrospective_peel_num)) |> 
