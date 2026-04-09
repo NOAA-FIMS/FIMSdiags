@@ -1,6 +1,6 @@
 # FIMSdiags 0.1.1
 
-* Fixes bug in example code (example input data was renamed)
+* Fixes bug in examples and vignette (related to recent changes in FIMS)
 
 # FIMSdiags 0.1.0
 
