@@ -43,8 +43,8 @@ This function is called by run_fims_likelihood()
  create_default_configurations() |>
  create_default_parameters(data = data_4_model)
 # Fit a FIMS model with 1 year of data removed
- fit <- run_modified_pars_fims(new_value = 12.9, 
-   parameter_name = "log_rzero", 
+ fit <- run_modified_pars_fims(new_value = 12.9,
+   parameter_name = "log_rzero",
    parameters = parameters, data = data_big)
 }
 }

@@ -147,8 +147,8 @@ run_modified_data_fims <- function(years_to_remove = 0, data, parameters) {
   } else {
     # exclude weight-at-age from the calculation of the max year of data
     max_timing <- data_to_use |>
-      dplyr::filter(type != "weight_at_age") |>
-      dplyr::pull(timing) |>
+      dplyr::filter(.data[["type"]] != "weight_at_age") |>
+      dplyr::pull(.data[["timing"]]) |>
       max(na.rm = TRUE)
     data_mod <- data_to_use |>
       dplyr::filter(
