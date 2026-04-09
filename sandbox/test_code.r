@@ -13,9 +13,9 @@ usethis::proj_set(".", force = TRUE)
 clear()
 ## Testing how to remove one year of data and run multiple FIMS models
 # Load sample data
-data("data1")
+data("data_big")
 # Prepare data for FIMS model
-data_4_model <- FIMSFrame(data1)
+data_4_model <- FIMSFrame(data_big)
 
 # Define fleet specifications
 fleet1 <- list(
@@ -52,7 +52,7 @@ devtools::load_all()
 like_fit <- run_fims_likelihood(
   model = base_model,
   parameters = parameters,
-  data = data1,
+  data = data_big,
   n_cores = 3,
   min = -1,
   max = 1,
@@ -64,17 +64,17 @@ plot_likelihood(like_fit)
 clear()
 
 # remove one year of data and create new dataframe
-# need to keep catch and weight-at-age data, just remove indices, length comp, and age comps
-data2 <- data1 |>
+# need to keep catch and weight_at_age data, just remove indices, length comp, and age comps
+data2 <- data_big |>
             dplyr::filter(
-                !(type %in% c("index", "age", "length", "age-to-length-conversion")) |
+                !(type %in% c("index", "age", "length", "age_to_length_conversion")) |
                 dateend <= max(dateend) - lubridate::years(years_to_remove) #TODO: change dateend to timing and change the years to remove
             )
 
 # Check that run_fims_model() can use same parameters as base model and produce the same output
 retro_fit <- run_fims_retrospective(
   years_to_remove = 0:2, 
-  data = data1, 
+  data = data_big, 
   parameters = parameters, 
   n_cores = 3
   )

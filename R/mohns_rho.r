@@ -46,9 +46,9 @@
 #' \dontrun{
 #' library(FIMS)
 #' # Use built-in dataset from FIMS
-#' data("data1")
+#' data("data_big")
 #' # Prepare data for FIMS model
-#' data_4_model <- FIMSFrame(data1)
+#' data_4_model <- FIMSFrame(data_big)
 #' # Create parameters
 #' parameters <- data_4_model |>
 #'   create_default_configurations() |>
@@ -57,7 +57,7 @@
 #' # Run retrospective analysis
 #' retro_fit <- run_fims_retrospective(
 #'   years_to_remove = 0:5,
-#'   data = data1,
+#'   data = data_big,
 #'   parameters = parameters,
 #'   n_cores = 1
 #' )
@@ -101,7 +101,7 @@ calculate_mohns_rho <- function(retro_fit, quantity) {
   mohn_values <- numeric()
   
   # Calculate vector of ending year for each model
-  end_year <- max(retro_estimates$year_i) - retro_fit$years_to_remove
+  end_year <- max(retro_estimates$year_i, na.rm = TRUE) - retro_fit$years_to_remove
   
   # Calculate relative differences for each peel (excluding reference model)
   for (i in 2:length(retro_fit$years_to_remove)) {
