@@ -1,83 +1,12 @@
 # FIMSdiags
 
-[![R-CMD-check](https://github.com/NOAA-FIMS/FIMSdiags/actions/workflows/call-r-cmd-check.yml/badge.svg)](https://github.com/NOAA-FIMS/FIMSdiags/actions/workflows/call-r-cmd-check.yml)
+FIMSdiags was absorbed into FIMS with [commit f05ea09](https://github.com/NOAA-FIMS/FIMS/commit/f05ea09ff7b648940272e88eb4982570da663d8a) and this package is now archived. In September of 2026 the repository will no longer be archived and instead it will be removed from the NOAA-FIMS organization to reduce confusion. If you have any questions feel free to [contact the FIMS Team](https://noaa-fims.github.io/contact/).
 
-FIMSdiags is a companion package to [FIMS](https://github.com/NOAA-FIMS/FIMS). It allows users to take a FIMS model and run common diagnostic analyses on their models. FIMSdiags is in active development and we are continuously adding features and improving current ones. Currently, the available diagnostics in the package are:
-
--   Retrospective analysis
-
--   Likelihood profile
-
-## Learning FIMSdiags
-
-Each FIMSdiags function has a vignette describing how to apply them to a FIMS model. These are available in the <a href="https://noaa-fims.github.io/FIMSdiags/articles/index.html" target="_blank">articles</a> section of the [FIMS github.io website](https://noaa-fims.github.io/FIMSdiags/).
-
-The help documentation for each function is available within R via a command like `?FIMSdiags::run_fims_likelihood`.
-
-## Installing FIMSdiags  
-
-Install the most recent version of FIMSdiags using the following code:
-
-``` R
-install.packages("remotes")
-remotes::install_github("NOAA-FIMS/FIMSdiags")
-```
-or using {renv}: 
-```R
-renv::install("NOAA-FIMS/FIMSdiags")
-# Update lockfile once package is installed
-renv::snapshot()
-```
-## Usage  
-
-```R
-library(FIMS)
-library(FIMSdiags)
-
-# Prepare data for FIMS model
-data("data1")
-data_4_model <- FIMSFrame(data1)
-
-# Create parameters
-parameters <- data_4_model |>
-  create_default_configurations() |>
-  create_default_parameters(data = data_4_model)
-
-# Run the base model
-base_model <- parameters |>
-  initialize_fims(data = data_4_model) |>
-  fit_fims(optimize = TRUE)
-
-# Run a likelihood profile over R0 
-like_fit <- run_fims_likelihood(
-  model = base_model,
-  parameters = parameters,
-  data = data1,
-  parameter_name = "log_rzero",
-  n_cores = 3,
-  min = -1,
-  max = 1,
-  length = 3
-)
-
-plot_likelihood(like_fit)
-clear()
-
-# Run a retrospective analysis for 5 years
-retro_fit <- run_fims_retrospective(
-  years_to_remove = 0:5, 
-  data = data1, 
-  parameters = parameters, 
-  n_cores = 3
-  )
-
-plot_retrospective(retro_fit, quantity = "spawning_biomass")
-clear()
-```
+Please navigate to the [vignette in FIMS on diagnostics](https://noaa-fims.github.io/FIMS/articles/fims-diagnostics.html) for learning more about the resources that are available.
 
 ## Getting Help 
 
-If you encounter a bug, please open an [issue](https://github.com/NOAA-FIMS/FIMSdiags/issues) and provide a minimal reproducible example. If you have a question or an idea for future development, feel free to post to the [Discussion Board](https://github.com/orgs/NOAA-FIMS/discussions). We welcome all ideas and suggestions. 
+If you encounter a bug, please open an [issue](https://github.com/NOAA-FIMS/FIMS/issues) and provide a minimal reproducible example. If you have a question or an idea for future development, feel free to post to the [Discussion Board](https://github.com/orgs/NOAA-FIMS/discussions). We welcome all ideas and suggestions. 
 
 ## NOAA Disclaimer
 
